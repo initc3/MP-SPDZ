@@ -1,0 +1,13 @@
+version: '3.4'
+
+services:
+  mp-spdz:
+    image: mp-spdz-local
+    build:
+      context: .
+      dockerfile: Dockerfile
+    cap_add:
+      - NET_ADMIN
+    volumes:
+      - ./Programs:/usr/src/MP-SPDZ/Programs
+    command: bash Programs/Source/hbmpc_mimc_test.sh

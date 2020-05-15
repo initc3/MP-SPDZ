@@ -1,0 +1,42 @@
+program.bit_length = 255
+print("program.bit_length: ", program.bit_length)
+program.security = 40
+
+# MiMC
+rounds = 161
+
+@vectorize
+def mimc_prf(m, key):
+    x = m
+
+    for r in range(rounds):
+        x = (x + key + r) ** 3
+
+    x = x + key
+    return x
+
+# Inputs
+a = sint.get_input_from(0)
+b = sint.get_input_from(1)
+c = sint.get_input_from(2)
+
+# Array of (duplicate) inputs
+n = 200
+A = Array(n, sint)
+for i in range(n):
+	A[i] = sint(a)
+
+# Compute equalities
+# if 0:
+#     sum = 0
+#     for _ in range(n):
+#         sum += (A[i] == 5)
+
+# Compute mimc
+z = 0
+for i in range(n):
+    z += mimc_prf(a, i)
+y = mimc_prf(a, b)
+
+print_ln('MiMC(%s, %s) = %s', a.reveal(), b.reveal(), y.reveal());
+

@@ -40,7 +40,8 @@ endif
 # must be exactly ceil(len(p)/len(word)) for the relevant prime p
 # Default for GFP_MOD_SZ is 2, which is good for 128-bit p
 # Default for MAX_MOD_SZ is 10, which suffices for all Overdrive protocols
-# MOD = -DMAX_MOD_SZ=10 -DGFP_MOD_SZ=2
+# MOD = -DMAX_MOD_SZ=10 -DGFP_MOD_SZ=4
+MOD = -DGFP_MOD_SZ=4
 
 LDLIBS = -lmpirxx -lmpir -lsodium $(MY_LDLIBS)
 LDLIBS += -lboost_system -lssl -lcrypto
