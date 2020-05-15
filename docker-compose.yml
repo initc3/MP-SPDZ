@@ -10,4 +10,5 @@ services:
       - NET_ADMIN
     volumes:
       - ./Programs:/usr/src/MP-SPDZ/Programs
+      - ./Compiler:/usr/src/MP-SPDZ/Compiler
     command: bash Programs/Source/hbmpc_mimc_test.sh
