@@ -21,7 +21,7 @@ b = sint.get_input_from(1)
 c = sint.get_input_from(2)
 
 # Array of (duplicate) inputs
-n = 100
+n = 50
 A = Array(n, sint)
 @for_range(n)
 def f(i):
@@ -42,4 +42,3 @@ y = sum(zs)
 print_ln('Computing %s instances of MIMC', n)
 y = mimc_prf(a, b)
 print_ln('MiMC(%s, %s) = %s', a.reveal(), b.reveal(), y.reveal());
-
