@@ -18,4 +18,5 @@ WORKDIR /usr/src/MP-SPDZ
 COPY . .
 RUN make -j 2 tldr
 RUN make -j 2 shamir
+RUN make -j 2 online offline
 RUN mkdir Player-Data

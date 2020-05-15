@@ -500,7 +500,10 @@ int generate(ez::ezOptionParser& opt)
   prep_data_prefix = PREP_DIR;
   // Set up the fields
   T::clear::template generate_setup<T>(prep_data_prefix, nplayers, lgp);
-  gfp::init_default(lgp);
+  // gfp::init_default(lgp);
+  // BLS12_381
+  gfp::init_field(bigint("52435875175126190479447740508185965837690552500527637822603658699938581184513"));
+  
 
   /* Find number players and MAC keys etc*/
   typename T::mac_type::Scalar keyp;

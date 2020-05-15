@@ -21,10 +21,11 @@ b = sint.get_input_from(1)
 c = sint.get_input_from(2)
 
 # Array of (duplicate) inputs
-n = 200
+n = 100
 A = Array(n, sint)
-for i in range(n):
-	A[i] = sint(a)
+@for_range(n)
+def f(i):
+    A[i] = sint(a)
 
 # Compute equalities
 # if 0:
@@ -33,10 +34,12 @@ for i in range(n):
 #         sum += (A[i] == 5)
 
 # Compute mimc
-z = 0
-for i in range(n):
-    z += mimc_prf(a, i)
+zs = Array(n, sint)
+@for_range(n)
+def f(i):
+    zs[i] = mimc_prf(a, i)
+y = sum(zs)
+print_ln('Computing %s instances of MIMC', n)
 y = mimc_prf(a, b)
-
 print_ln('MiMC(%s, %s) = %s', a.reveal(), b.reveal(), y.reveal());
 
