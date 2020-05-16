@@ -14,7 +14,7 @@ done
 Scripts/setup-ssl.sh 4
 
 # Set up the player inputs
-mkdir Player-Data
+mkdir -p Player-Data
 echo 14 > Player-Data/Input-P0-0
 echo 12 > Player-Data/Input-P1-0
 echo 8 > Player-Data/Input-P2-0
@@ -24,7 +24,8 @@ echo 0 > Player-Data/Input-P3-0
 ## SPDZ style, n-of-n additive encoding
 # Setup online
 echo "Running Fake Offline Phase"
-Scripts/setup-online.sh $players 256 128
+Scripts/setup-online.sh $players 256 128 $BLS_PRIME
+#Scripts/setup-online.sh $players 256 128
 # Run the Online
 echo "SPDZ-style Online Phase"
 for i in 0 1 2 3; do
@@ -45,4 +46,3 @@ for prog in $progs; do
 	wait $pid
     done
 done
-

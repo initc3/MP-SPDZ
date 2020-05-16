@@ -275,6 +275,15 @@ int main(int argc, const char** argv)
         "--lgp" // Flag token.
   );
   opt.add(
+          "", // Default.
+          0, // Required?
+          1, // Number of args expected.
+          0, // Delimiter if expecting multiple args.
+          "Prime for GF(p) field (default: generated from -lgp argument)", // Help description.
+          "-P", // Flag token.
+          "--prime" // Flag token.
+  );
+  opt.add(
         to_string(gf2n::default_degree()).c_str(), // Default.
         0, // Required?
         1, // Number of args expected.
@@ -456,7 +465,7 @@ int generate(ez::ezOptionParser& opt)
   opt.get("--default")->getInt(default_num);
   ntrip2 = ntripp = nbits2 = nbitsp = nsqr2 = nsqrp = ninp2 = ninpp = ninv =
   nbittrip = nbitgf2ntrip = default_num;
-  
+
   if (opt.isSet("--ntriples"))
   {
     opt.get("--ntriples")->getInts(list_options);
@@ -502,8 +511,20 @@ int generate(ez::ezOptionParser& opt)
   T::clear::template generate_setup<T>(prep_data_prefix, nplayers, lgp);
   // gfp::init_default(lgp);
   // BLS12_381
-  gfp::init_field(bigint("52435875175126190479447740508185965837690552500527637822603658699938581184513"));
-  
+  //gfp::init_field(bigint("52435875175126190479447740508185965837690552500527637822603658699938581184513"));
+
+  string p;
+  //if (opt.isSet("--prime"))
+  opt.get("--prime")->getString(p);
+  if (not p.empty() and p.compare("0") != 0)
+  {
+     bigint prime = bigint(p);
+     gfp::init_field(prime);
+  }
+  else
+  {
+    gfp::init_default(lgp);
+  }
 
   /* Find number players and MAC keys etc*/
   typename T::mac_type::Scalar keyp;

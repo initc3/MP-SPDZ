@@ -39,6 +39,7 @@ RUN echo MY_LDLIBS += -Wl,-rpath -Wl,./local/lib -L./local/lib >> CONFIG.mine
 
 COPY . .
 
+RUN make clean
 RUN make -j 2 tldr
 RUN make -j 2 shamir
 RUN make -j 2 online offline
