@@ -24,7 +24,7 @@ the top folder:
 
 ```
 Scripts/tldr.sh
-./compile.py tutorial
+mpspdz-compile tutorial
 echo 1 2 3 4 > Player-Data/Input-P0-0
 echo 1 2 3 4 > Player-Data/Input-P1-0
 Scripts/mascot.sh tutorial
@@ -48,7 +48,7 @@ security.
 
 ```
 make -j 8 tldr
-./compile.py tutorial
+mpspdz-compile tutorial
 echo 1 2 3 4 > Player-Data/Input-P0-0
 echo 1 2 3 4 > Player-Data/Input-P1-0
 Scripts/mascot.sh tutorial
@@ -187,7 +187,7 @@ to be compiled accordingly.
 
 #### Arithmetic modulo a prime
 
-```./compile.py [-F <integer bit length>] <program>```
+```mpspdz-compile [-F <integer bit length>] <program>```
 
 The integer bit length defaults to 64.
 
@@ -209,13 +209,13 @@ directly.
 
 #### Arithmetic modulo 2^k
 
-```./compile.py -R <integer bit length> <program>```
+```mpspdz-compile -R <integer bit length> <program>```
 
 Currently, most machines support bit lengths 64 and 72.
 
 #### Binary circuits
 
-```./compile.py -B <integer bit length> <program>```
+```mpspdz-compile -B <integer bit length> <program>```
 
 The integer length can be any number up to a maximum depending on the
 protocol. All protocols support at least 64-bit integers.
@@ -241,9 +241,9 @@ several ways of achieving this as described below.
 
 You can activate this by adding `-X` when compiling arithmetic
 circuits, that is
-```./compile.py -X [-F <integer bit length>] <program>```
+```mpspdz-compile -X [-F <integer bit length>] <program>```
 for computation modulo a prime and
-```./compile.py -X -R <integer bit length> <program>```
+```mpspdz-compile -X -R <integer bit length> <program>```
 for computation modulo 2^k.
 
 Internally, this uses daBits described by [Rotaru and
@@ -271,7 +271,7 @@ in `Programs/Circuits`. To run the AES-128 circuit provided with
 SCALE-MAMBA, you can run the following:
 ```
 make Programs/Circuits
-./compile.py aes_circuit
+mpspdz-compile aes_circuit
 Scripts/semi.sh aes_circuit
 ```
 This downloads the circuit, compiles it to MP-SPDZ bytecode, and runs
@@ -294,7 +294,7 @@ $ mkdir myprogs
 $ cd myprogs
 $ mkdir -p Programs/Source
 $ vi Programs/Source/test.mpc
-$ ../spdz/compile.py test.mpc
+$ mpspdz-compile test.mpc
 $ ls Programs/
 Bytecode  Public-Input  Schedules  Source
 $ ../spdz/Scripts/setup-online.sh
@@ -319,7 +319,7 @@ python3 squeezenet_main.py --in ./SampleImages/n02109961_36.JPEG --saveTFMetadat
 python3 squeezenet_main.py --in ./SampleImages/n02109961_36.JPEG --scalingFac 12 --saveImgAndWtData True
 cd ../../../..
 Scripts/fixed-rep-to-float.py EzPC/Athos/Networks/SqueezeNetImgNet/SqNetImgNet_img_input.inp
-./compile.py -R 64 tf EzPC/Athos/Networks/SqueezeNetImgNet/graphDef.bin 1 trunc_pr split
+mpspdz-compile -R 64 tf EzPC/Athos/Networks/SqueezeNetImgNet/graphDef.bin 1 trunc_pr split
 Scripts/ring.sh tf-EzPC_Athos_Networks_SqueezeNetImgNet_graphDef.bin-1-trunc_pr-split
 ```
 
@@ -403,7 +403,7 @@ First compile the virtual machine:
 and a high-level program, for example the tutorial (use `-R 64` for
 SPDZ2k and Semi2k and `-B <precision>` for SemiBin):
 
-`./compile.py -F 64 tutorial`
+`mpspdz-compile -F 64 tutorial`
 
 To run the tutorial with two parties on one machine, run:
 
@@ -446,7 +446,7 @@ Compile the virtual machine:
 
 and the high-level program:
 
-`./compile.py -B <integer bit length> <program>`
+`mpspdz-compile -B <integer bit length> <program>`
 
 Then run as follows:
   - Garbler: ```./yao-party.x [-I] -p 0 <program>```
@@ -527,9 +527,9 @@ First, compile the virtual machine:
 
 `make -j 8 replicated-ring-party.x`
 
-In order to compile a high-level program, use `./compile.py -R 64`:
+In order to compile a high-level program, use `mpspdz-compile -R 64`:
 
-`./compile.py -R 64 tutorial`
+`mpspdz-compile -R 64 tutorial`
 
 If using another computation domain, use `-F` or `-B` as described in
 [the relevant section above](#compiling-high-level-programs).
@@ -583,9 +583,9 @@ three parties, change the definition of `MAX_N_PARTIES` in
 
 `make -j 8 real-bmr-party.x`
 
-In order to compile a high-level program, use `./compile.py -B`:
+In order to compile a high-level program, use `mpspdz-compile -B`:
 
-`./compile.py -B 32 tutorial`
+`mpspdz-compile -B 32 tutorial`
 
 Finally, run the two parties as follows:
 
@@ -643,7 +643,7 @@ Parameters can be customised by running
 
 To compile for example the program in `./Programs/Source/tutorial.mpc`, run:
 
-`./compile.py tutorial`
+`mpspdz-compile tutorial`
 
 This creates the bytecode and schedule files in Programs/Bytecode/ and Programs/Schedules/
 
@@ -725,7 +725,7 @@ You can benchmark the ORAM implementation as follows:
 
 1) Edit `Program/Source/gc_oram.mpc` to change size and to choose
 Circuit ORAM or linear scan without ORAM. 
-2) Run `./compile.py -D gc_oram`. The `-D` argument instructs the
+2) Run `mpspdz-compile -D gc_oram`. The `-D` argument instructs the
 compiler to remove dead code. This is useful for more complex programs
 such as this one.
 3) Run `gc_oram` in the virtual machines as explained above.
