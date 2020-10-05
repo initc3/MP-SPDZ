@@ -24,7 +24,7 @@ echo 0 > Player-Data/Input-P3-0
 ## SPDZ style, n-of-n additive encoding
 # Setup online
 echo "Running Fake Offline Phase"
-Scripts/setup-online.sh $players 256 128 $BLS_PRIME
+Scripts/setup-online.sh $players 256 128 10000 $BLS_PRIME
 #Scripts/setup-online.sh $players 256 128
 # Run the Online
 echo "SPDZ-style Online Phase"
