@@ -29,8 +29,16 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
 #        && make install \
 #        && rm -rf /usr/src/ntl
 
-WORKDIR /usr/src/MP-SPDZ
+ENV MP_SPDZ_HOME /usr/src/MP-SPDZ
+WORKDIR $MP_SPDZ_HOME
+
+# mpir
+COPY --from=mpir:55fe6a9 /usr/local/mpir ./local
+RUN echo MY_CFLAGS += -I./local/include >> CONFIG.mine
+RUN echo MY_LDLIBS += -Wl,-rpath -Wl,./local/lib -L./local/lib >> CONFIG.mine
+
 COPY . .
+
 RUN make -j 2 tldr
 RUN make -j 2 shamir
 RUN make -j 2 online offline
