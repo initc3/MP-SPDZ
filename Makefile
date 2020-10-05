@@ -92,8 +92,8 @@ tldr:
 
 ifeq ($(OS), Darwin)
 tldr: mac-setup
-else
-tldr: mpir
+#else
+#tldr: mpir
 endif
 
 shamir: shamir-party.x malicious-shamir-party.x galois-degree.x
