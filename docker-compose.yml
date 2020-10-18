@@ -12,7 +12,8 @@ services:
     volumes:
       - ./compiled-programs/Bytecode:/usr/src/MP-SPDZ/Programs/Bytecode
       - ./compiled-programs/Schedules:/usr/src/MP-SPDZ/Programs/Schedules
-      - ./Compiler:/usr/src/MP-SPDZ/Compiler
+      - ./Compiler/mpspdz:/usr/src/MP-SPDZ/Compiler/mpspdz
+      - ./Compiler/setup.py:/usr/src/MP-SPDZ/Compiler/setup.py
       - ./CONFIG:/usr/src/MP-SPDZ/CONFIG
       - ./Makefile:/usr/src/MP-SPDZ/Makefile
       - ./Programs/Source:/usr/src/MP-SPDZ/Programs/Source
