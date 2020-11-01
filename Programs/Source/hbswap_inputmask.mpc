@@ -1,0 +1,9 @@
+from mpspdz.instructions import writesharestofile
+
+def main():
+    for i in range(2):
+        input_mask_share = sint.get_random_triple()[0]
+        writesharestofile(input_mask_share)
+        print_ln('input_mask_%s: %s', i, input_mask_share.reveal())
+
+main()

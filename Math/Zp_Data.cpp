@@ -50,6 +50,7 @@ void Zp_Data::init(const bigint& p,bool mont)
       bigint r3=(r2*r)%pr;
       mpn_copyi(R3,r3.get_mpz_t()->_mp_d,mpz_size(r3.get_mpz_t()));
 
+      cout << "**** r "<<r<<endl;
       if (sizeof(unsigned long)!=sizeof(mp_limb_t))
 	{ cout << "The underlying types of MPIR mean we cannot use our Montgomery code" << endl;
           throw not_implemented();

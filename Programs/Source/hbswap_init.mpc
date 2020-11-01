@@ -1,0 +1,13 @@
+from mpspdz.instructions import writesharestofile
+
+def main():
+    pool_ETH = sfix(10)
+    pool_TOK = sfix(20)
+
+    writesharestofile(pool_ETH.v)
+    writesharestofile(pool_TOK.v)
+
+    market_price = pool_ETH / pool_TOK
+    print_ln('marketPrice %s', market_price.reveal())
+
+main()

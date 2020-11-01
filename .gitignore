@@ -115,3 +115,7 @@ Thumbs.db
 
 # Sphinx build
 _build/
+
+.idea/
+*db/
+*data/

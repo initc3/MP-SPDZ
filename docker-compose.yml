@@ -18,4 +18,6 @@ services:
       - ./Makefile:/usr/src/MP-SPDZ/Makefile
       - ./Programs/Source:/usr/src/MP-SPDZ/Programs/Source
       - ./Scripts:/usr/src/MP-SPDZ/Scripts
+      - ./Math:/usr/src/MP-SPDZ/Math
+      - ./Scripts/hbswap:/gopath/src/github.com/initc3/MP-SPDZ/Scripts/hbswap
     command: bash Programs/Source/hbmpc_mimc_test.sh

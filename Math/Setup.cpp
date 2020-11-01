@@ -103,6 +103,8 @@ void generate_prime(bigint& p, int lgp, int m)
       p = u + 1;
     }
 
+  cout<<"***** prime "<<p<<endl;
+
 #ifdef VERBOSE
   cout << "\t p = " << p << "  u = " << u << "  :   ";
   cout << lgp << " <= " << numBits(p) << endl;

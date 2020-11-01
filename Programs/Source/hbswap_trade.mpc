@@ -1,0 +1,40 @@
+from mpspdz.instructions import readsharesfromfile
+
+def readshare(idx):
+    start = regint(idx * 32)
+    end = regint()
+    masked_value = sint()
+    readsharesfromfile(start, end, masked_value)
+    #print_ln('share_%s: %s', idx, masked_value.reveal())
+    return masked_value
+
+def main():
+    pool_ETH = sfix(readshare(0))
+    pool_TOK = sfix(readshare(1))
+    print_ln('pool_ETH %s pool_TOK %s', pool_ETH.reveal(), pool_TOK.reveal())
+
+    amt_ETH = sfix(readshare(4) - readshare(2))
+    expected_amt_TOK = sfix(readshare(5) - readshare(3))
+    print_ln('amt_ETH %s expected_amt_TOK %s', amt_ETH.reveal(), expected_amt_TOK.reveal())
+
+    amt_TOK = pool_TOK - pool_ETH * pool_TOK / (pool_ETH - amt_ETH)
+    print_ln('amt_TOK: %s', amt_TOK.reveal())
+
+    actual_price = sfix(-1) * amt_ETH / amt_TOK
+    print_ln('actual_price: %s', actual_price.reveal())
+
+    buy_ETH = amt_ETH > 0
+    acceptable = amt_TOK >= expected_amt_TOK
+    flag = 1 - (1 - buy_ETH * acceptable) * (1 - (1 - buy_ETH) * acceptable)
+    pool_ETH -= amt_ETH * flag
+    pool_TOK -= amt_TOK * flag
+    print_ln('pool_ETH: %s', pool_ETH.reveal())
+    print_ln('pool_TOK: %s', pool_TOK.reveal())
+
+    writesharestofile(pool_ETH.v)
+    writesharestofile(pool_TOK.v)
+
+    market_price = pool_ETH / pool_TOK
+    print_ln('marketPrice %s', market_price.reveal())
+
+main()
