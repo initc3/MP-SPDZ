@@ -5,36 +5,57 @@ def readshare(idx):
     end = regint()
     masked_value = sint()
     readsharesfromfile(start, end, masked_value)
-    #print_ln('share_%s: %s', idx, masked_value.reveal())
     return masked_value
 
+def get_pool():
+    return sfix(readshare(0)), sfix(readshare(1))
+
+def get_balance():
+    return sfix(readshare(2)), sfix(readshare(3))
+
+def get_trade_amt():
+    return sfix(readshare(6) - readshare(4)), sfix(readshare(7) - readshare(5))
+
 def main():
-    pool_ETH = sfix(readshare(0))
-    pool_TOK = sfix(readshare(1))
-    print_ln('pool_ETH %s pool_TOK %s', pool_ETH.reveal(), pool_TOK.reveal())
+    pool_A, pool_B = get_pool()
+    print_ln('pool_A %s\npool_B %s', pool_A.reveal(), pool_B.reveal())
 
-    amt_ETH = sfix(readshare(4) - readshare(2))
-    expected_amt_TOK = sfix(readshare(5) - readshare(3))
-    print_ln('amt_ETH %s expected_amt_TOK %s', amt_ETH.reveal(), expected_amt_TOK.reveal())
+    balance_A, balance_B = get_balance()
+    print_ln('balance_A %s\nbalance_B %s', balance_A.reveal(), balance_B.reveal())
 
-    amt_TOK = pool_TOK - pool_ETH * pool_TOK / (pool_ETH - amt_ETH)
-    print_ln('amt_TOK: %s', amt_TOK.reveal())
+    amt_A, amt_B = get_trade_amt()
+    print_ln('amt_A %s\namt_B %s', amt_A.reveal(), amt_B.reveal())
 
-    actual_price = sfix(-1) * amt_ETH / amt_TOK
-    print_ln('actual_price: %s', actual_price.reveal())
+    buy_A = amt_A > 0
+    enough_B = -amt_B <= balance_B
+    calc_A = pool_A - pool_B * pool_A / (pool_B - amt_B)
+    accept_A = calc_A >= amt_A
+    flag_buy_A = buy_A * enough_B * accept_A
+    print_ln('buy_A %s\nenough_B %s\ncalc_A %s\naccept_A %s\nflag_buy_A %s', buy_A.reveal(), enough_B.reveal(), calc_A.reveal(), accept_A.reveal(), flag_buy_A.reveal())
+    pool_A -= flag_buy_A * calc_A
+    pool_B -= flag_buy_A * amt_B
+    print_ln('pool_A %s\npool_B %s', pool_A.reveal(), pool_B.reveal())
 
-    buy_ETH = amt_ETH > 0
-    acceptable = amt_TOK >= expected_amt_TOK
-    flag = 1 - (1 - buy_ETH * acceptable) * (1 - (1 - buy_ETH) * acceptable)
-    pool_ETH -= amt_ETH * flag
-    pool_TOK -= amt_TOK * flag
-    print_ln('pool_ETH: %s', pool_ETH.reveal())
-    print_ln('pool_TOK: %s', pool_TOK.reveal())
+    buy_B = 1 - buy_A
+    enough_A = -amt_A <= balance_A
+    calc_B = pool_B - pool_A * pool_B / (pool_A - amt_A)
+    accept_B = calc_B >= amt_B
+    flag_buy_B = buy_B * enough_A * accept_B
+    print_ln('buy_B %s\nenough_A %s\ncalc_B %s\naccept_B %s\nflag_buy_B %s', buy_B.reveal(), enough_A.reveal(), calc_B.reveal(), accept_B.reveal(), flag_buy_B.reveal())
+    pool_A -= flag_buy_B * amt_A
+    pool_B -= flag_buy_B * calc_B
+    print_ln('pool_A %s\npool_B %s', pool_A.reveal(), pool_B.reveal())
 
-    writesharestofile(pool_ETH.v)
-    writesharestofile(pool_TOK.v)
+    writesharestofile(pool_A.v)
+    writesharestofile(pool_B.v)
 
-    market_price = pool_ETH / pool_TOK
+    change_A = flag_buy_A * calc_A + flag_buy_B * amt_A
+    change_B = flag_buy_A * amt_B + flag_buy_B * calc_B
+    print_ln("change_A %s\nchange_B %s", change_A.reveal(), change_B.reveal())
+    writesharestofile(change_A.v)
+    writesharestofile(change_B.v)
+
+    market_price = pool_A / pool_B
     print_ln('marketPrice %s', market_price.reveal())
 
 main()
