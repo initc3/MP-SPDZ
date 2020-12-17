@@ -1,4 +1,4 @@
-from mpspdz.instructions import readsharesfromfile
+from Compiler.instructions import readsharesfromfile
 
 def readshare(idx):
     start = regint(idx * 32)
