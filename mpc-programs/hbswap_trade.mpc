@@ -8,13 +8,13 @@ def readshare(idx):
     return masked_value
 
 def get_pool():
-    return sfix(readshare(0)), sfix(readshare(1))
+    return sfix._new(readshare(0)), sfix._new(readshare(1))
 
 def get_balance():
-    return sfix(readshare(2)), sfix(readshare(3))
+    return sfix._new(readshare(2)), sfix._new(readshare(3))
 
 def get_trade_amt():
-    return sfix(readshare(6) - readshare(4)), sfix(readshare(7) - readshare(5))
+    return sfix._new(readshare(6) - readshare(4)), sfix._new(readshare(7) - readshare(5))
 
 def main():
     pool_A, pool_B = get_pool()
