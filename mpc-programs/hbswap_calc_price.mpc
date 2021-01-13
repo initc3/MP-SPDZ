@@ -1,0 +1,20 @@
+from Compiler.instructions import readsharesfromfile
+
+def readshare(idx):
+    start = regint(idx * 32)
+    end = regint()
+    masked_value = sint()
+    readsharesfromfile(start, end, masked_value)
+    return masked_value
+
+def main():
+    total_price = sfix._new(readshare(0))
+    #print_ln('total_price %s', total_price.reveal())
+
+    total_cnt = readshare(1)
+    #print_ln('total_cnt %s', total_cnt.reveal())
+
+    avg_price = total_price / total_cnt
+    print_ln('%s', avg_price.reveal())
+
+main()

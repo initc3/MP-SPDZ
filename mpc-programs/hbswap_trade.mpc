@@ -55,7 +55,8 @@ def main():
     writesharestofile(change_A.v)
     writesharestofile(change_B.v)
 
-    market_price = pool_A / pool_B
-    print_ln('marketPrice %s', market_price.reveal())
+    trade_price = -1 * change_B / change_A
+    writesharestofile(trade_price.v)
+    print_ln('marketPrice %s', trade_price.reveal())
 
 main()
