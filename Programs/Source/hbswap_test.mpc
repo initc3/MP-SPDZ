@@ -1,0 +1,13 @@
+from Compiler.instructions import readsharesfromfile
+
+def readshare(idx):
+    start = regint(idx * 32)
+    end = regint()
+    masked_value = sint()
+    readsharesfromfile(start, end, masked_value)
+    return masked_value
+
+def main():
+   print_ln('!!!! %s', sfix._new(readshare(0)).reveal())
+
+main()

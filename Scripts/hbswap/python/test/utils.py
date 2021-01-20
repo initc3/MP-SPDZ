@@ -33,6 +33,7 @@ def reconstruct(shares, n):
 
 def check_consistency(shares):
     value = reconstruct(shares, t + 1)
+    print(value)
     for i in range(t + 2, n + 1):
         if reconstruct(shares, i) != value:
             print('inconsistent')
