@@ -1,0 +1,43 @@
+from Compiler.instructions import readsharesfromfile
+
+def readshare(idx):
+    start = regint(idx * 32)
+    end = regint()
+    masked_value = sint()
+    readsharesfromfile(start, end, masked_value)
+    return masked_value
+
+def get_pool():
+    return sfix._new(readshare(0)), sfix._new(readshare(1))
+
+def get_balance():
+    return sfix._new(readshare(2)), sfix._new(readshare(3))
+
+def get_trade_amt():
+    return sfix._new(readshare(6) - readshare(4)), sfix._new(readshare(7) - readshare(5))
+
+def main():
+    pool_A = sfix._new(readshare(0))
+    pool_B = sfix._new(readshare(1))
+    print_ln('pool_A %s\npool_B %s', pool_A.reveal(), pool_B.reveal())
+
+    amt = sfix._new(readshare(2))
+    print_ln('amt %s', amt.reveal())
+
+    total_supply = sfix._new(readshare(3))
+    print_ln('total_supply %s', total_supply.reveal())
+
+    amt_A = amt * pool_A / total_supply
+    amt_B = amt * pool_B / total_supply
+
+    pool_A = pool_A - amt_A
+    pool_B = pool_B - amt_B
+
+    writesharestofile(pool_A.v)
+    writesharestofile(pool_B.v)
+
+    for i in range(4):
+        amt_A.reveal_to(i)
+        amt_B.reveal_to(i)
+
+main()

@@ -9,10 +9,13 @@ def readshare(idx):
 
 def main():
     balance = sfix._new(readshare(0))
-    withdraw_amt = sfix._new(readshare(1))
-    print_ln('balance %s withdraw_amt %s', balance.reveal(), withdraw_amt.reveal())
-    agree = balance >= withdraw_amt
-    print_ln('agree %s', agree.reveal())
+    amt = sfix._new(readshare(1))
+    print_ln('balance %s amt %s', balance.reveal(), amt.reveal())
+
+    enough_balance = balance >= amt
+    print_ln('enough_balance %s', enough_balance.reveal())
+
     for i in range(4):
-        agree.reveal_to(i)
+        enough_balance.reveal_to(i)
+
 main()

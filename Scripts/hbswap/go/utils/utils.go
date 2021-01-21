@@ -164,3 +164,26 @@ func stringToBigInt(v string) (*big.Int) {
 	value.SetString(v, 10)
 	return value
 }
+
+//func dbPut(key string, value []byte) {
+//	mut.Lock()
+//	db, _ := leveldb.OpenFile(fmt.Sprintf("Scripts/hbswap/db/server%s", serverID), nil)
+//	err := db.Put([]byte(key), value, nil)
+//	if err != nil {
+//		fmt.Println("Error writing to database")
+//	}
+//	db.Close()
+//	mut.Unlock()
+//}
+
+//func dbGet(key string) string {
+//	mut.Lock()
+//	db, _ := leveldb.OpenFile(fmt.Sprintf("Scripts/hbswap/db/server%s", serverID), nil)
+//	data, err := db.Get([]byte(key), nil)
+//	if err != nil {
+//		fmt.Println("Error getting from database")
+//	}
+//	db.Close()
+//	mut.Unlock()
+//	return string(data)
+//}

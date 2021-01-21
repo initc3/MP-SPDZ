@@ -9,5 +9,6 @@ def readshare(idx):
 
 def main():
    print_ln('!!!! %s', sfix._new(readshare(0)).reveal())
+   print_ln('!!!! %s', readshare(0).reveal())
 
 main()
