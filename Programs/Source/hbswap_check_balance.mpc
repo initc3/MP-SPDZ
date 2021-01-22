@@ -1,15 +1,16 @@
-from Compiler.instructions import readsharesfromfile
-
-def readshare(idx):
+def read_sint(idx):
     start = regint(idx * 32)
     end = regint()
     masked_value = sint()
     readsharesfromfile(start, end, masked_value)
     return masked_value
 
+def sint_to_sfix(x):
+    return sfix._new(x)
+
 def main():
-    balance = sfix._new(readshare(0))
-    amt = sfix._new(readshare(1))
+    balance = sint_to_sfix(read_sint(0))
+    amt = sint_to_sfix(read_sint(1))
     print_ln('balance %s amt %s', balance.reveal(), amt.reveal())
 
     enough_balance = balance >= amt

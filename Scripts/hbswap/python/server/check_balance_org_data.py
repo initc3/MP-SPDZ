@@ -1,12 +1,14 @@
 import sys
 
-from utils import from_hex, sz
+sys.path.insert(1, 'Scripts/hbswap/python')
+from utils import location_private_output, from_hex, sz
 
 if __name__=='__main__':
     server_id = sys.argv[1]
 
-    file = f"Player-Data/Private-Output-{server_id}"
-    agree = 0
+    file = location_private_output(server_id)
+
     with open(file, 'rb') as f:
-        agree = f.read(sz)
-    print(from_hex(agree))
+        enough_balance = from_hex(f.read(sz))
+
+    print(enough_balance)
