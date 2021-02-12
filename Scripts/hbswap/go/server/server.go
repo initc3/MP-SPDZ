@@ -35,6 +35,7 @@ var (
 	prevTime 	= int64(0)
 	pq     		utils.PriorityQueue
 	mutexPQ		= &sync.Mutex{}
+	eventSet	map[utils.EventID]bool
 )
 
 func checkBalance(token string, user string, amt string) int {
@@ -126,14 +127,16 @@ func watch() {
 			go func() {
 				fmt.Println("Push InitPool")
 				task := utils.Task {
-					BlockNumber: 	oce.Raw.BlockNumber,
-					TxIndex:		oce.Raw.TxIndex,
-					LogIndex:		oce.Raw.Index,
+					EventID: 		utils.EventID{
+						BlockNumber: 	oce.Raw.BlockNumber,
+						TxIndex:		oce.Raw.TxIndex,
+						LogIndex:		oce.Raw.Index,
+					},
 					EventName:		"InitPool",
 					Parameters:   	[]string{
-										oce.User.String(),
-										oce.TokenA.String(),
-										oce.TokenB.String(),
+										strings.ToLower(oce.User.String()),
+										strings.ToLower(oce.TokenA.String()),
+										strings.ToLower(oce.TokenB.String()),
 										oce.AmtA.String(),
 										oce.AmtB.String(),
 									},
@@ -149,14 +152,16 @@ func watch() {
 			go func() {
 				fmt.Println("Push AddLiquidity")
 				task := utils.Task {
-					BlockNumber: 	oce.Raw.BlockNumber,
-					TxIndex:		oce.Raw.TxIndex,
-					LogIndex:		oce.Raw.Index,
+					EventID: 		utils.EventID{
+						BlockNumber: 	oce.Raw.BlockNumber,
+						TxIndex:		oce.Raw.TxIndex,
+						LogIndex:		oce.Raw.Index,
+					},
 					EventName:		"AddLiquidity",
 					Parameters:   	[]string{
-						oce.User.String(),
-						oce.TokenA.String(),
-						oce.TokenB.String(),
+						strings.ToLower(oce.User.String()),
+						strings.ToLower(oce.TokenA.String()),
+						strings.ToLower(oce.TokenB.String()),
 						oce.AmtA.String(),
 						oce.AmtB.String(),
 					},
@@ -172,14 +177,16 @@ func watch() {
 			go func() {
 				fmt.Println("Push RemoveLiquidity")
 				task := utils.Task {
-					BlockNumber: 	oce.Raw.BlockNumber,
-					TxIndex:		oce.Raw.TxIndex,
-					LogIndex:		oce.Raw.Index,
+					EventID: 		utils.EventID{
+						BlockNumber: 	oce.Raw.BlockNumber,
+						TxIndex:		oce.Raw.TxIndex,
+						LogIndex:		oce.Raw.Index,
+					},
 					EventName:		"RemoveLiquidity",
 					Parameters:   	[]string{
-						oce.User.String(),
-						oce.TokenA.String(),
-						oce.TokenB.String(),
+						strings.ToLower(oce.User.String()),
+						strings.ToLower(oce.TokenA.String()),
+						strings.ToLower(oce.TokenB.String()),
 						oce.Amt.String(),
 					},
 				}
@@ -194,15 +201,17 @@ func watch() {
 			go func() {
 				fmt.Println("Push Trade")
 				task := utils.Task {
-					BlockNumber: 	oce.Raw.BlockNumber,
-					TxIndex:		oce.Raw.TxIndex,
-					LogIndex:		oce.Raw.Index,
+					EventID: 		utils.EventID{
+						BlockNumber: 	oce.Raw.BlockNumber,
+						TxIndex:		oce.Raw.TxIndex,
+						LogIndex:		oce.Raw.Index,
+					},
 					EventName:		"Trade",
 					Parameters:   	[]string{
 						oce.TradeSeq.String(),
-						oce.User.String(),
-						oce.TokenA.String(),
-						oce.TokenB.String(),
+						strings.ToLower(oce.User.String()),
+						strings.ToLower(oce.TokenA.String()),
+						strings.ToLower(oce.TokenB.String()),
 						oce.IdxA.String(),
 						oce.IdxB.String(),
 						oce.MaskedA.String(),
@@ -220,13 +229,15 @@ func watch() {
 			go func() {
 				fmt.Println("Push SecretDeposit")
 				task := utils.Task {
-					BlockNumber: 	oce.Raw.BlockNumber,
-					TxIndex:		oce.Raw.TxIndex,
-					LogIndex:		oce.Raw.Index,
+					EventID: 		utils.EventID{
+						BlockNumber: 	oce.Raw.BlockNumber,
+						TxIndex:		oce.Raw.TxIndex,
+						LogIndex:		oce.Raw.Index,
+					},
 					EventName:		"SecretDeposit",
 					Parameters:   	[]string{
-						oce.Token.String(),
-						oce.User.String(),
+						strings.ToLower(oce.Token.String()),
+						strings.ToLower(oce.User.String()),
 						oce.Amt.String(),
 					},
 				}
@@ -242,14 +253,16 @@ func watch() {
 			go func() {
 				fmt.Println("Push SecretWithdraw")
 				task := utils.Task {
-					BlockNumber: 	oce.Raw.BlockNumber,
-					TxIndex:		oce.Raw.TxIndex,
-					LogIndex:		oce.Raw.Index,
+					EventID: 		utils.EventID{
+						BlockNumber: 	oce.Raw.BlockNumber,
+						TxIndex:		oce.Raw.TxIndex,
+						LogIndex:		oce.Raw.Index,
+					},
 					EventName:		"SecretWithdraw",
 					Parameters:   	[]string{
 						oce.Seq.String(),
-						oce.Token.String(),
-						oce.User.String(),
+						strings.ToLower(oce.Token.String()),
+						strings.ToLower(oce.User.String()),
 						oce.Amt.String(),
 					},
 				}
@@ -268,6 +281,11 @@ func processTasks() {
 			mutexPQ.Lock()
 			task := heap.Pop(&pq).(*utils.Task)
 			mutexPQ.Unlock()
+
+			if _, ok := eventSet[task.EventID]; ok {
+				continue
+			}
+			eventSet[task.EventID] = true
 
 			switch task.EventName {
 			case "InitPool":
@@ -289,6 +307,22 @@ func processTasks() {
 					updateBalance(tokenA, user, fmt.Sprintf("-%s", amtA), "1")
 					updateBalance(tokenB, user, fmt.Sprintf("-%s", amtB), "1")
 					updateBalance(fmt.Sprintf("%s+%s", tokenA, tokenB), user, amtLiquidity, "1")
+
+					_tokenA := common.HexToAddress(tokenA)
+					_tokenB := common.HexToAddress(tokenB)
+					price := fmt.Sprintf("%f", float64(_amtB) / float64(_amtA))
+					if serverID == "0" {
+						utils.UpdatePrice(conn, server, _tokenA, _tokenB, price)
+					} else {
+						prevBlockNum := utils.GetUpdateTime(conn, _tokenA, _tokenB)
+						for true {
+							time.Sleep(time.Second)
+							curBlockNum := utils.GetUpdateTime(conn, _tokenA, _tokenB)
+							if curBlockNum > prevBlockNum {
+								break
+							}
+						}
+					}
 				}
 
 			case "AddLiquidity":
@@ -394,14 +428,14 @@ func processTasks() {
 					fmt.Printf("avg_price %s\n", price)
 
 					_tokenA := common.HexToAddress(tokenA)
-					_toeknB := common.HexToAddress(tokenB)
+					_tokenB := common.HexToAddress(tokenB)
 					if serverID == "0" {
-						utils.UpdatePrice(conn, server, _tokenA, _toeknB, price)
+						utils.UpdatePrice(conn, server, _tokenA, _tokenB, price)
 					} else {
-						prevBlockNum := utils.GetUpdateTime(conn, _tokenA, _toeknB)
+						prevBlockNum := utils.GetUpdateTime(conn, _tokenA, _tokenB)
 						for true {
 							time.Sleep(time.Second)
-							curBlockNum := utils.GetUpdateTime(conn, _tokenA, _toeknB)
+							curBlockNum := utils.GetUpdateTime(conn, _tokenA, _tokenB)
 							if curBlockNum > prevBlockNum {
 								break
 							}
@@ -437,6 +471,7 @@ func main() {
 	conn = utils.GetEthClient(utils.WsEndpoint)
 
 	server = utils.GetAccount(fmt.Sprintf("server_%s", serverID))
+	eventSet = map[utils.EventID]bool{}
 
 	var wg sync.WaitGroup
 	wg.Add(1)

@@ -11,8 +11,6 @@ prepare() {
 
   rm -rf Scripts/hbswap/db
   mkdir Scripts/hbswap/db
-
-  Scripts/setup-ssl.sh $players
 }
 
 compile() {

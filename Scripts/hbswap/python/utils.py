@@ -15,17 +15,20 @@ def key_inputmask(idx):
 def key_pool(token_A, token_B, token):
     return f'pool_{token_A}_{token_B}_{token}'.encode()
 
-def key_price(trade_seq):
-    return f'price_{trade_seq}'.encode()
+def key_trade_price(trade_seq):
+    return f'trade_price_{trade_seq}'.encode()
+
+def key_trade_time(trade_seq):
+    return f'trade_time_{trade_seq}'.encode()
 
 def key_total_price(token_A, token_B):
     return f'trade_price_{token_A}_{token_B}'.encode()
 
+def key_total_cnt(token_A, token_B):
+    return f'total_cnt_{token_A}-{token_B}'.encode()
+
 def key_total_supply(token_A, token_B):
     return f'total_supply_{token_A}_{token_B}'.encode()
-
-def key_trade_cnt(token_A, token_B):
-    return f'trade_cnt_{token_A}-{token_B}'.encode()
 
 ######## files
 
@@ -48,7 +51,8 @@ def openDB(location):
         try:
             return leveldb.LevelDB(location)
         except leveldb.LevelDBError:
-            time.sleep(3)
+            print("db not ready")
+            time.sleep(10)
 
 def get_value(db, key):
     try:

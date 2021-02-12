@@ -72,7 +72,7 @@ class Client:
         return inputmasks
 
     async def req_balance_shares(self, host, port, token, user):
-        url = f"http://{host}:{port}/balance/{token}{user}"
+        url = f"http://{host}:{port}/balance/{token},{user}"
         result = await self.send_request(url)
         return result["balance"]
 
