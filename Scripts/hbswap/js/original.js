@@ -4,22 +4,13 @@ const t = 1;
 const fp = 1 << 16;
 const eth = "0x0000000000000000000000000000000000000000";
 
-/* // private net
-   endpoint = 'http://127.0.0.1:8545';
-   const hbswapAddr = "0xF74Eb25Ab1785D24306CA6b3CBFf0D0b0817C5E2";
-   const token1 = "0x6b5c9637e0207c72Ee1a275b6C3b686ba8D87385";
-   const token2 = "0x8C89e5D2bCc0e4C26E3295d48d052E11bd03C06A"; */
-
-// test net
-/* endpoint = 'https://kovan.infura.io/v3/6a82d2519efb4d748c02552e02e369c1';
+endpoint = 'https://kovan.infura.io/v3/6a82d2519efb4d748c02552e02e369c1';
 var web3 = new Web3();
-web3.setProvider(new web3.providers.HttpProvider(endpoint)); */
-window.web3 = new Web3(ethereum);
+web3.setProvider(new web3.providers.HttpProvider(endpoint));
+
 const hbswapAddr = "0x77527DB365eC8dE2296D33464224E045bD7882C8";
 const token1 = "0x63e7F20503256DdCFEC64872aAdb785d5A290CBb";
 const token2 = "0x403B0F962566Ffb960d0dE98875dc09603Aa67e9";
-
-
 
 const hbswapABI = JSON.parse($("#hbswapABI").text());
 const hbswapContract = new web3.eth.Contract(hbswapABI, hbswapAddr);
@@ -34,18 +25,10 @@ for (let [k, v] of tokenList) {
     contractList.set(v, new web3.eth.Contract(tokenABI, v))
 }
 
-// Get the current metamask account (or allow to select others)
-/* $("#defaultaccount").text(await promisify(web3.eth.getAccounts));
-const user = web3.eth.accounts.privateKeyToAccount(privateKey).address;
-$("#user").text(user); */
-/* const user = web3.eth.getAccounts */
-/* const user = ethereum.request({ method: 'eth_requestAccounts' }); */
-
 /* let account = web3.eth.accounts.decrypt({"address":"ef860fb0634474ae0e6cec1a8e0dbe7c70a280a5","crypto":{"cipher":"aes-128-ctr","ciphertext":"ef78844ca575e03eab239f3a97cf5f2393326b3190a103e8ecfa4c8f0fa087a8","cipherparams":{"iv":"a56aa4c42ffc07a13708b2fe61a98e3d"},"kdf":"scrypt","kdfparams":{"dklen":32,"n":262144,"p":1,"r":8,"salt":"6bb662badf3affd44acf50aec280074ee487ad86f30967ef69e64582f2d9074f"},"mac":"1e684483d72e49e4dfa5b9b4caba7a04ba9091f6512bacbd30a0e6976424f807"},"id":"f47efed8-2874-4801-85af-4a90af7f9c2b","version":3}, ""); */
-/* const privateKey = '0xa2452f41d937aa23f2d6be28e953293827f15a6277104c857fdd3373f766745a'
+const privateKey = '0xa2452f41d937aa23f2d6be28e953293827f15a6277104c857fdd3373f766745a'
 const user = web3.eth.accounts.privateKeyToAccount(privateKey).address;
-$("#user").text(user); */
-/* web3.eth.defaultAccount = account.address; */
+$("#user").text(user);
 
 // **** Internal functions ****
 
@@ -492,10 +475,6 @@ async function updateDepositToken() {
 // ********
 
 async function init() {
-    const user = (await ethereum.request({ method: 'eth_requestAccounts'}))[0];
-    console.log(user);
-    $("#user").text(user);
-
     await updateTradePair();
     await updateDepositToken();
     await updatePoolPair();

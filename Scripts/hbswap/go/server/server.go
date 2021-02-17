@@ -427,6 +427,10 @@ func processTasks() {
 					price := strings.Split(stdout, "\n")[1]
 					fmt.Printf("avg_price %s\n", price)
 
+					if price == "0" || price == "" {
+						continue
+					}
+
 					_tokenA := common.HexToAddress(tokenA)
 					_tokenB := common.HexToAddress(tokenB)
 					if serverID == "0" {

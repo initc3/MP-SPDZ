@@ -74,6 +74,21 @@ class Server:
             print(f"s{self.server_id} response: {res}")
             return web.json_response(data)
 
+        async def handler_log(request):
+            print(f"s{self.server_id} request: {request}")
+            n = int(request.match_info.get("n"))
+            a_file = open(f"Scripts/hbswap/log/mpc_server_{self.server_id}.log", "r")
+            lines = a_file.readlines()
+            last_lines = lines[-n:]
+            res = ''
+            for line in last_lines:
+                res += line
+            data = {
+                "log": f'{res}',
+            }
+            print(f"s{self.server_id} response: {res}")
+            return web.json_response(data)
+
         app = web.Application()
 
         cors = aiohttp_cors.setup(app, defaults={
@@ -90,6 +105,8 @@ class Server:
         cors.add(resource.add_route("GET", handler_price))
         resource = cors.add(app.router.add_resource("/balance/{token_user}"))
         cors.add(resource.add_route("GET", handler_balance))
+        resource = cors.add(app.router.add_resource("/log/{n}"))
+        cors.add(resource.add_route("GET", handler_log))
 
         runner = web.AppRunner(app)
         await runner.setup()

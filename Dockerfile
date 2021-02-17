@@ -97,3 +97,4 @@ RUN pip3 install gmpy
 RUN pip3 install toml
 RUN pip3 install leveldb
 RUN pip3 install aiohttp
+RUN pip3 install aiohttp_cors
