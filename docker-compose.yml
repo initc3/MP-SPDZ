@@ -18,4 +18,7 @@ services:
       - ./Makefile:/usr/src/MP-SPDZ/Makefile
       - ./Programs/Source:/usr/src/MP-SPDZ/Programs/Source
       - ./Scripts:/usr/src/MP-SPDZ/Scripts
-    command: bash Programs/Source/hbmpc_mimc_test.sh
+      - ./Scripts/hbswap:/gopath/src/github.com/initc3/MP-SPDZ/Scripts/hbswap
+      - ./Utils/random-shamir.cpp:/usr/src/MP-SPDZ/Utils/random-shamir.cpp
+      - ./Processor/Processor.hpp:/usr/src/MP-SPDZ/Processor/Processor.hpp
+    command: tail -F anythingD
