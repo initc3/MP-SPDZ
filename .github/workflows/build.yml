@@ -22,13 +22,50 @@ jobs:
         name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v1
       -
-        name: Build docker image for HoneyBadgerSwap
+        name: mpspdz - build docker image
         uses: docker/build-push-action@v2
         with:
           context: .
           file: Dockerfile
           builder: ${{ steps.buildx.outputs.name }}
+          target: base
           tags: |
             initc3/mpspdz,
             initc3/mpspdz:${{ github.head_ref }},
             initc3/mpspdz:${{ steps.vars.outputs.short_sha }}
+      -
+        name: malicious-shamir-party.x - build docker image
+        uses: docker/build-push-action@v2
+        with:
+          context: .
+          file: Dockerfile
+          builder: ${{ steps.buildx.outputs.name }}
+          build-args: program=malicious-shamir-party.x
+          tags: |
+            initc3/malicious-shamir-party.x,
+            initc3/malicious-shamir-party.x:${{ github.head_ref }},
+            initc3/malicious-shamir-party.x:${{ steps.vars.outputs.short_sha }}
+      -
+        name: mal-shamir-offline.x - build docker image
+        uses: docker/build-push-action@v2
+        with:
+          context: .
+          file: Dockerfile
+          builder: ${{ steps.buildx.outputs.name }}
+          build-args: program=mal-shamir-offline.x
+          tags: |
+            initc3/mal-shamir-offline.x,
+            initc3/mal-shamir-offline.x:${{ github.head_ref }},
+            initc3/mal-shamir-offline.x:${{ steps.vars.outputs.short_sha }}
+      -
+        name: random-shamir.x - build docker image
+        uses: docker/build-push-action@v2
+        with:
+          context: .
+          file: Dockerfile
+          builder: ${{ steps.buildx.outputs.name }}
+          build-args: program=random-shamir.x
+          tags: |
+            initc3/random-shamir.x,
+            initc3/random-shamir.x:${{ github.head_ref }},
+            initc3/random-shamir.x:${{ steps.vars.outputs.short_sha }}
