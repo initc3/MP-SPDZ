@@ -47,7 +47,7 @@ Machine<sint, sgf2n>::Machine(int my_number, Names& playerNames,
   sint::bit_type::part_type::open_type::init_field();
 
   // make directory for outputs if necessary
-  mkdir_p(PREP_DIR);
+  mkdir_p(opts.prep_dir.c_str());
 
   string id = "machine";
   if (use_encryption)

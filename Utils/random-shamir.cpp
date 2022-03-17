@@ -92,6 +92,16 @@ int main(int argc, const char** argv)
 		"-p", // Flag token.
 		"--port" // Flag token.
 	);
+
+    opt.add(
+          "Player-Data", // Default.
+          0, // Required?
+          1, // Number of args expected.
+          0, // Delimiter if expecting multiple args.
+          "Preprocessing directory (default: 'Player-Data')", // Help description.
+          "--prep-dir" // Flag token.
+    );
+
     opt.parse(argc, argv);
 
 	if (opt.isSet("-h")) {
@@ -125,13 +135,14 @@ int generate(ezOptionParser& opt, int nparties)
 
     //int playerno, nparties, nshares, port;
     int playerno, nshares, port;
-    string hostname, prime;
+    string hostname, prime, prep_dir;
     opt.get("--playerno")->getInt(playerno);
     //opt.get("--nparties")->getInt(nparties);
     opt.get("--nshares")->getInt(nshares);
     opt.get("--prime")->getString(prime);
     opt.get("--host")->getString(hostname);
     opt.get("--port")->getInt(port);
+    opt.get("--prep-dir")->getString(prep_dir);
 
     Names N;
     Server::start_networking(N, playerno, nparties, hostname, port);
@@ -168,7 +179,7 @@ int generate(ezOptionParser& opt, int nparties)
 
     stringstream ss;
     ofstream outputFile;
-    string prep_data_dir = get_prep_sub_dir<T>(PREP_DIR, P.num_players());
+    string prep_data_dir = get_prep_sub_dir<T>(prep_dir, P.num_players());
     ss << prep_data_dir << "Randoms-" << T::type_short() << "-P" << P.my_num();
     outputFile.open(ss.str().c_str());
 

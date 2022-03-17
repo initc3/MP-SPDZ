@@ -560,6 +560,7 @@ int main(int argc, const char** argv)
           "-n", // Flag token.
           "--nontgomery" // Flag token.
   );
+  // TODO: Add --prep-dir opt
   opt.parse(argc, argv);
 
   int lgp;

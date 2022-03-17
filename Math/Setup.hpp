@@ -25,7 +25,7 @@ void read_setup(const string& dir_prefix, int lgp = -1)
     string filename = dir_prefix + "Params-Data";
 
     if (dir_prefix.compare("") == 0)
-        filename = string(PREP_DIR "Params-Data");
+        filename = OnlineOptions::singleton.prep_dir + "/Params-Data";
 
 #ifdef DEBUG_FILES
   cerr << "loading params from: " << filename << endl;

@@ -139,7 +139,7 @@ void BaseMachine::print_timers()
 
 string BaseMachine::memory_filename(const string& type_short, int my_number)
 {
-  return PREP_DIR "Memory-" + type_short + "-P" + to_string(my_number);
+  return OnlineOptions::singleton.prep_dir + "/" + "Memory-" + type_short + "-P" + to_string(my_number);
 }
 
 string BaseMachine::get_domain(string progname)

@@ -30,6 +30,7 @@ OnlineOptions::OnlineOptions() : playerno(-1)
     cmd_private_output_file = "";
     file_prep_per_thread = false;
     trunc_error = 40;
+    prep_dir = "Player-Data";
 #ifdef VERBOSE
     verbose = true;
 #else
@@ -75,7 +76,16 @@ OnlineOptions::OnlineOptions(ez::ezOptionParser& opt, int argc,
           "-OF", // Flag token.
           "--output-file" // Flag token.
     );
- 
+
+    opt.add(
+          prep_dir.c_str(), // Default.
+          0, // Required?
+          1, // Number of args expected.
+          0, // Delimiter if expecting multiple args.
+          "Preprocessing directory (default: 'Player-Data')", // Help description.
+          "--prep-dir" // Flag token.
+    );
+
     opt.add(
             "", // Default.
             0, // Required?
@@ -110,6 +120,7 @@ OnlineOptions::OnlineOptions(ez::ezOptionParser& opt, int argc,
 
     opt.get("-IF")->getString(cmd_private_input_file);
     opt.get("-OF")->getString(cmd_private_output_file);
+    opt.get("--prep-dir")->getString(prep_dir);
 
     opt.get("--bucket-size")->getInt(bucket_size);
 

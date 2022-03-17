@@ -28,6 +28,7 @@ public:
     int bucket_size;
     std::string cmd_private_input_file;
     std::string cmd_private_output_file;
+    std::string prep_dir;
     bool verbose;
     bool file_prep_per_thread;
     int trunc_error;
@@ -54,9 +55,10 @@ public:
     string prep_dir_prefix(int nplayers)
     {
         int lgp = this->lgp;
+        string prep_dir = this->prep_dir;
         if (prime)
             lgp = numBits(prime);
-        return get_prep_sub_dir<T>(PREP_DIR, nplayers, lgp);
+        return get_prep_sub_dir<T>(prep_dir, nplayers, lgp);
     }
 };
 

@@ -39,7 +39,7 @@ int OfflineMachine<W>::run()
     U::clear::init_field(U::clear::default_degree());
     T::bit_type::mac_key_type::init_field();
     auto binary_mac_key = read_generate_write_mac_key<
-            typename T::bit_type::part_type>(P);
+            typename T::bit_type::part_type>(P, this->online_opts.prep_dir);
     typename T::bit_type::LivePrep bit_prep(usage);
     GC::ShareThread<typename T::bit_type> thread(bit_prep, P, binary_mac_key);
 
@@ -57,8 +57,10 @@ template<class T>
 void OfflineMachine<W>::generate()
 {
     T::clear::next::template init<typename T::clear>(false);
-    T::clear::template write_setup<T>(P.num_players());
-    auto mac_key = read_generate_write_mac_key<T>(P);
+
+    T::clear::template write_setup<T>(this->online_opts.prep_dir, P.num_players());
+
+    auto mac_key = read_generate_write_mac_key<T>(P, this->online_opts.prep_dir);
     DataPositions generated;
     generated.set_num_players(P.num_players());
     typename T::MAC_Check output(mac_key);

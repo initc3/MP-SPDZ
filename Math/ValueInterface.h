@@ -33,6 +33,8 @@ public:
     template<class T>
     static void write_setup(int) {}
     static void write_setup(string) {}
+    template<class T>
+    static void write_setup(string, int) {}
     static void check_setup(string) {}
 
     static bigint pr() { throw runtime_error("no prime modulus"); }

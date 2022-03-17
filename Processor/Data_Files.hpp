@@ -39,16 +39,20 @@ Preprocessing<T>* Preprocessing<T>::get_new(
   if (live_prep)
     return new typename T::LivePrep(usage);
   else
-    return new GC::BitPrepFiles<T>(N,
-        get_prep_sub_dir<T>(PREP_DIR, N.num_players()), usage,
+    return new GC::BitPrepFiles<T>(
+        N,
+        get_prep_sub_dir<T>(OnlineOptions::singleton.prep_dir, N.num_players()),
+        usage,
         BaseMachine::thread_num);
 }
 
 template<class T>
 Sub_Data_Files<T>::Sub_Data_Files(const Names& N, DataPositions& usage,
     int thread_num) :
-    Sub_Data_Files(N,
-        OnlineOptions::singleton.prep_dir_prefix<T>(N.num_players()), usage,
+    Sub_Data_Files(
+        N,
+        OnlineOptions::singleton.prep_dir_prefix<T>(N.num_players()),
+        usage,
         thread_num)
 {
 }
@@ -64,8 +68,13 @@ template<class T>
 string Sub_Data_Files<T>::get_filename(const Names& N, Dtype type,
     int thread_num)
 {
-  return PrepBase::get_filename(get_prep_sub_dir<T>(N.num_players()),
-      type, T::type_short(), N.my_num(), thread_num);
+  return PrepBase::get_filename(
+          //get_prep_sub_dir<T>(N.num_players()),
+          get_prep_sub_dir<T>(OnlineOptions::singleton.prep_dir, N.num_players()),
+          type,
+          T::type_short(),
+          N.my_num(),
+          thread_num);
 }
 
 template<class T>
@@ -73,8 +82,12 @@ string Sub_Data_Files<T>::get_input_filename(const Names& N, int input_player,
     int thread_num)
 {
   return PrepBase::get_input_filename(
-      get_prep_sub_dir<T>(N.num_players()), T::type_short(), input_player,
-      N.my_num(), thread_num);
+      //get_prep_sub_dir<T>(N.num_players()),
+      get_prep_sub_dir<T>(OnlineOptions::singleton.prep_dir, N.num_players()),
+      T::type_short(),
+      input_player,
+      N.my_num(),
+      thread_num);
 }
 
 template<class T>
@@ -82,7 +95,11 @@ string Sub_Data_Files<T>::get_edabit_filename(const Names& N, int n_bits,
     int thread_num)
 {
   return PrepBase::get_edabit_filename(
-      get_prep_sub_dir<T>(N.num_players()), n_bits, N.my_num(), thread_num);
+      //get_prep_sub_dir<T>(N.num_players()),
+      get_prep_sub_dir<T>(OnlineOptions::singleton.prep_dir, N.num_players()),
+      n_bits,
+      N.my_num(),
+      thread_num);
 }
 
 template<class T>
@@ -327,7 +344,8 @@ typename Sub_Data_Files<T>::part_type& Sub_Data_Files<T>::get_part()
 {
   if (part == 0)
     part = new part_type(my_num, num_players,
-        get_prep_sub_dir<typename T::part_type>(num_players), this->usage,
+        //get_prep_sub_dir<typename T::part_type>(num_players), this->usage,
+        get_prep_sub_dir<typename T::part_type>("/tmp/prep_dir", num_players), this->usage,
         thread_num);
   return *part;
 }

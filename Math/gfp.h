@@ -81,6 +81,9 @@ class gfp_ : public ValueInterface
   template<class T>
   static void write_setup(int nplayers)
     { write_setup(get_prep_sub_dir<T>(nplayers)); }
+  template<class T>
+  static void write_setup(string dir, int nplayers)
+    { write_setup(get_prep_sub_dir<T>(dir, nplayers)); }
   static void write_setup(string dir)
     { write_online_setup(dir, pr()); }
   static void check_setup(string dir);

@@ -195,7 +195,8 @@ vector<vector<typename T::open_type>>& Shamir<T>::get_hyper(int t)
 template<class T>
 string Shamir<T>::hyper_filename(int t, int n)
 {
-    return PREP_DIR "/Hyper-" + to_string(t) + "-" + to_string(n) + "-"
+    // TODO: verify that this works
+    return OnlineOptions::singleton.prep_dir + "/Hyper-" + to_string(t) + "-" + to_string(n) + "-"
             + to_string(T::clear::pr());
 }
 

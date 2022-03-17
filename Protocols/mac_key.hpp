@@ -11,6 +11,8 @@
 
 #include "fake-stuff.hpp"
 
+// TODO: is this called when running mal-shamir-offline.x?
+// if yes, implement way to pass prep_dir
 template<class T>
 typename T::mac_key_type read_or_generate_mac_key(const Player& P,
         string directory = "")
