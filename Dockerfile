@@ -1,4 +1,4 @@
-FROM python:3.8.13-bullseye as base
+FROM python:3.10.3-bullseye as base
 
 RUN apt-get update && apt-get install -y --no-install-recommends \
                 automake \
