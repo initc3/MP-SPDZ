@@ -20,17 +20,17 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
                 valgrind \
         && rm -rf /var/lib/apt/lists/*
 
+# mpir
+COPY --from=initc3/mpir:55fe6a9 /usr/local/mpir/include/* /usr/local/include/
+COPY --from=initc3/mpir:55fe6a9 /usr/local/mpir/lib/* /usr/local/lib/
+COPY --from=initc3/mpir:55fe6a9 /usr/local/mpir/share/info/* /usr/local/share/info/
+
 ENV MP_SPDZ_HOME /usr/src/MP-SPDZ
 WORKDIR $MP_SPDZ_HOME
 
 RUN pip install --upgrade pip ipython
 
 COPY . .
-
-# mpir
-COPY --from=initc3/mpir:55fe6a9 /usr/local/mpir/include/* /usr/local/include/
-COPY --from=initc3/mpir:55fe6a9 /usr/local/mpir/lib/* /usr/local/lib/
-COPY --from=initc3/mpir:55fe6a9 /usr/local/mpir/share/info/* /usr/local/share/info/
 
 RUN echo "CXX = clang++-11" >> CONFIG.mine \
         && echo "USE_NTL = 1" >> CONFIG.mine \
@@ -48,16 +48,16 @@ RUN echo "MY_CFLAGS += -DDEBUG_NETWORKING" >> CONFIG.mine \
         && echo "MY_CFLAGS += -DDEBUG_FILE" >> CONFIG.mine
 
 
-FROM base
+FROM base as program
 
 ARG program="malicious-shamir-party.x"
 
 ARG mod="-DGFP_MOD_SZ=4"
-ARG prep_dir="/opt/preprocessing-data"
+RUN echo "MOD = ${mod}" >> CONFIG.mine
 
-RUN mkdir -p $prep_dir \
-        && echo "PREP_DIR = '-DPREP_DIR=\"${prep_dir}\"'" >> CONFIG.mine \
-        && echo "MOD = ${mod}" >> CONFIG.mine
+#ARG prep_dir="/opt/preprocessing-data"
+#RUN mkdir -p $prep_dir \
+#        && echo "PREP_DIR = '-DPREP_DIR=\"${prep_dir}/\"'" >> CONFIG.mine
 
 RUN make clean && make ${program} && cp ${program} /usr/local/bin/
 
@@ -66,3 +66,4 @@ RUN echo 1 2 3 4 > Player-Data/Input-P0-0 && echo 1 2 3 4 > Player-Data/Input-P1
 
 # test with:
 # malicious-shamir-party.x -N 4 -T 1 0 tutorial & malicious-shamir-party.x -N 4 -T 1 1 tutorial & malicious-shamir-party.x -N 4 -T 1 2 tutorial & malicious-shamir-party.x -N 4 -T 1 3 tutorial
+# malicious-shamir-party.x -N 4 -T 1 --player 0 --prep-dir /opt/elements tutorial & malicious-shamir-party.x -N 4 -T 1 --player 1 --prep-dir /opt/elements tutorial & malicious-shamir-party.x -N 4 -T 1 --player 2 --prep-dir /opt/elements tutorial & malicious-shamir-party.x -N 4 -T 1 --player 3 --prep-dir /opt/elements tutorial
