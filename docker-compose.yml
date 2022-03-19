@@ -6,6 +6,9 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
+    environment:
+      PREP_DIR: ${PREP_DIR}
+      PRIME: ${PRIME}
     working_dir: /usr/src/MP-SPDZ
     volumes:
       - ./Compiler:/usr/src/MP-SPDZ/Compiler
