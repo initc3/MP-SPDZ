@@ -1,0 +1,70 @@
+version: '3.8'
+
+services:
+  player0:
+    image: malicious-shamir-party
+    build:
+      context: .
+      dockerfile: Dockerfile
+      args:
+        program: malicious-shamir-party.x
+    working_dir: /usr/src/MP-SPDZ
+    volumes:
+      - ./Compiler:/usr/src/MP-SPDZ/Compiler
+      - ./CONFIG:/usr/src/MP-SPDZ/CONFIG
+      - ./Makefile:/usr/src/MP-SPDZ/Makefile
+      - ./Programs/Source:/usr/src/MP-SPDZ/Programs/Source
+      - ./Scripts:/usr/src/MP-SPDZ/Scripts
+    command: |
+      malicious-shamir-party.x -N 4 -T 1 --player 0 --prime ${PRIME} --prep-dir ${PREP_DIR} -h player0 tutorial
+
+  player1:
+    image: malicious-shamir-party
+    build:
+      context: .
+      dockerfile: Dockerfile
+      args:
+        program: malicious-shamir-party.x
+    working_dir: /usr/src/MP-SPDZ
+    volumes:
+      - ./Compiler:/usr/src/MP-SPDZ/Compiler
+      - ./CONFIG:/usr/src/MP-SPDZ/CONFIG
+      - ./Makefile:/usr/src/MP-SPDZ/Makefile
+      - ./Programs/Source:/usr/src/MP-SPDZ/Programs/Source
+      - ./Scripts:/usr/src/MP-SPDZ/Scripts
+    command: |
+      malicious-shamir-party.x -N 4 -T 1 --player 1 --prime ${PRIME} --prep-dir ${PREP_DIR} -h player0 tutorial
+
+  player2:
+    image: malicious-shamir-party
+    build:
+      context: .
+      dockerfile: Dockerfile
+      args:
+        program: malicious-shamir-party.x
+    working_dir: /usr/src/MP-SPDZ
+    volumes:
+      - ./Compiler:/usr/src/MP-SPDZ/Compiler
+      - ./CONFIG:/usr/src/MP-SPDZ/CONFIG
+      - ./Makefile:/usr/src/MP-SPDZ/Makefile
+      - ./Programs/Source:/usr/src/MP-SPDZ/Programs/Source
+      - ./Scripts:/usr/src/MP-SPDZ/Scripts
+    command: |
+      malicious-shamir-party.x -N 4 -T 1 --player 2 --prime ${PRIME} --prep-dir ${PREP_DIR} -h player0 tutorial
+
+  player3:
+    image: malicious-shamir-party
+    build:
+      context: .
+      dockerfile: Dockerfile
+      args:
+        program: malicious-shamir-party.x
+    working_dir: /usr/src/MP-SPDZ
+    volumes:
+      - ./Compiler:/usr/src/MP-SPDZ/Compiler
+      - ./CONFIG:/usr/src/MP-SPDZ/CONFIG
+      - ./Makefile:/usr/src/MP-SPDZ/Makefile
+      - ./Programs/Source:/usr/src/MP-SPDZ/Programs/Source
+      - ./Scripts:/usr/src/MP-SPDZ/Scripts
+    command: |
+      malicious-shamir-party.x -N 4 -T 1 --player 3 --prime ${PRIME} --prep-dir ${PREP_DIR} -h player0 tutorial

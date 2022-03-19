@@ -1,0 +1,74 @@
+version: '3.8'
+
+services:
+  player0:
+    image: random-shamir
+    build:
+      context: .
+      dockerfile: Dockerfile
+      args:
+        program: random-shamir.x
+    working_dir: /usr/src/MP-SPDZ
+    volumes:
+      - ./Compiler:/usr/src/MP-SPDZ/Compiler
+      - ./CONFIG:/usr/src/MP-SPDZ/CONFIG
+      - ./Makefile:/usr/src/MP-SPDZ/Makefile
+      - ./Programs/Source:/usr/src/MP-SPDZ/Programs/Source
+      - ./Scripts:/usr/src/MP-SPDZ/Scripts
+      - /tmp/shamir/p0:${PREP_DIR}
+    command: |
+      random-shamir.x -i 0 -N 4 -T 1 --nshares 10000 --prep-dir ${PREP_DIR} --host player0
+
+  player1:
+    image: random-shamir
+    build:
+      context: .
+      dockerfile: Dockerfile
+      args:
+        program: random-shamir.x
+    working_dir: /usr/src/MP-SPDZ
+    volumes:
+      - ./Compiler:/usr/src/MP-SPDZ/Compiler
+      - ./CONFIG:/usr/src/MP-SPDZ/CONFIG
+      - ./Makefile:/usr/src/MP-SPDZ/Makefile
+      - ./Programs/Source:/usr/src/MP-SPDZ/Programs/Source
+      - ./Scripts:/usr/src/MP-SPDZ/Scripts
+      - /tmp/shamir/p1:${PREP_DIR}
+    command: |
+      random-shamir.x -i 1 -N 4 -T 1 --nshares 10000 --prep-dir ${PREP_DIR} --host player0
+
+  player2:
+    image: random-shamir
+    build:
+      context: .
+      dockerfile: Dockerfile
+      args:
+        program: random-shamir.x
+    working_dir: /usr/src/MP-SPDZ
+    volumes:
+      - ./Compiler:/usr/src/MP-SPDZ/Compiler
+      - ./CONFIG:/usr/src/MP-SPDZ/CONFIG
+      - ./Makefile:/usr/src/MP-SPDZ/Makefile
+      - ./Programs/Source:/usr/src/MP-SPDZ/Programs/Source
+      - ./Scripts:/usr/src/MP-SPDZ/Scripts
+      - /tmp/shamir/p2:${PREP_DIR}
+    command: |
+      random-shamir.x -i 2 -N 4 -T 1 --nshares 10000 --prep-dir ${PREP_DIR} --host player0
+
+  player3:
+    image: random-shamir
+    build:
+      context: .
+      dockerfile: Dockerfile
+      args:
+        program: random-shamir.x
+    working_dir: /usr/src/MP-SPDZ
+    volumes:
+      - ./Compiler:/usr/src/MP-SPDZ/Compiler
+      - ./CONFIG:/usr/src/MP-SPDZ/CONFIG
+      - ./Makefile:/usr/src/MP-SPDZ/Makefile
+      - ./Programs/Source:/usr/src/MP-SPDZ/Programs/Source
+      - ./Scripts:/usr/src/MP-SPDZ/Scripts
+      - /tmp/shamir/p3:${PREP_DIR}
+    command: |
+      random-shamir.x -i 3 -N 4 -T 1 --nshares 10000 --prep-dir ${PREP_DIR} --host player0
