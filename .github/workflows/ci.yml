@@ -50,7 +50,9 @@ jobs:
           file: Dockerfile
           builder: ${{ steps.buildx.outputs.name }}
           push: true
-          build-args: program=malicious-shamir-party.x
+          build-args: |
+            program=malicious-shamir-party.x,
+            prep_dir=/opt/preprocessing-data
           tags: |
             initc3/malicious-shamir-party.x,
             initc3/malicious-shamir-party.x:${{ github.ref_name }},
@@ -80,7 +82,9 @@ jobs:
           file: Dockerfile
           builder: ${{ steps.buildx.outputs.name }}
           push: true
-          build-args: program=random-shamir.x
+          build-args: |
+            program=random-shamir.x,
+            prep_dir=/opt/inputmask-shares
           tags: |
             initc3/random-shamir.x,
             initc3/random-shamir.x:${{ github.ref_name }},
