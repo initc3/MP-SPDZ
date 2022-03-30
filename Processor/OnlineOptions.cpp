@@ -30,7 +30,7 @@ OnlineOptions::OnlineOptions() : playerno(-1)
     cmd_private_output_file = "";
     file_prep_per_thread = false;
     trunc_error = 40;
-    prep_dir = "Player-Data";
+    prep_dir = std::string(PREP_DIR);
 #ifdef VERBOSE
     verbose = true;
 #else
@@ -82,7 +82,7 @@ OnlineOptions::OnlineOptions(ez::ezOptionParser& opt, int argc,
           0, // Required?
           1, // Number of args expected.
           0, // Delimiter if expecting multiple args.
-          "Preprocessing directory (default: 'Player-Data')", // Help description.
+          "Preprocessing directory (defaults to 'PREP_DIR' config)", // Help description.
           "--prep-dir" // Flag token.
     );
 
