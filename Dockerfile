@@ -55,9 +55,9 @@ ARG program="malicious-shamir-party.x"
 ARG mod="-DGFP_MOD_SZ=4"
 RUN echo "MOD = ${mod}" >> CONFIG.mine
 
-#ARG prep_dir="/opt/preprocessing-data"
-#RUN mkdir -p $prep_dir \
-#        && echo "PREP_DIR = '-DPREP_DIR=\"${prep_dir}/\"'" >> CONFIG.mine
+ARG prep_dir="/opt/preprocessing-data"
+RUN mkdir -p $prep_dir \
+        && echo "PREP_DIR = '-DPREP_DIR=\"${prep_dir}/\"'" >> CONFIG.mine
 
 RUN make clean && make ${program} && cp ${program} /usr/local/bin/
 
