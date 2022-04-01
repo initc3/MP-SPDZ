@@ -64,6 +64,17 @@ RUN make clean && make ${program} && cp ${program} /usr/local/bin/
 RUN ./compile.py tutorial
 RUN echo 1 2 3 4 > Player-Data/Input-P0-0 && echo 1 2 3 4 > Player-Data/Input-P1-0
 
-# test with:
+# test with ...
+# default:
 # malicious-shamir-party.x -N 4 -T 1 0 tutorial & malicious-shamir-party.x -N 4 -T 1 1 tutorial & malicious-shamir-party.x -N 4 -T 1 2 tutorial & malicious-shamir-party.x -N 4 -T 1 3 tutorial
+
+# with -F:
+# malicious-shamir-party.x -F -N 4 -T 1 0 tutorial & malicious-shamir-party.x -F -N 4 -T 1 1 tutorial & malicious-shamir-party.x -F -N 4 -T 1 2 tutorial & malicious-shamir-party.x -F -N 4 -T 1 3 tutorial
+
+# with --prep-dir set at runtime
 # malicious-shamir-party.x -N 4 -T 1 --player 0 --prep-dir /opt/elements tutorial & malicious-shamir-party.x -N 4 -T 1 --player 1 --prep-dir /opt/elements tutorial & malicious-shamir-party.x -N 4 -T 1 --player 2 --prep-dir /opt/elements tutorial & malicious-shamir-party.x -N 4 -T 1 --player 3 --prep-dir /opt/elements tutorial
+
+
+
+# ${program} -N 4 -T 1 0 tutorial & ${program} -N 4 -T 1 1 tutorial & ${program} -N 4 -T 1 2 tutorial & ${program} -N 4 -T 1 3 tutorial
+# ${program} -N 4 -T 1 --player 0 --prep-dir /opt/elements tutorial & ${program} -N 4 -T 1 --player 1 --prep-dir /opt/elements tutorial & ${program} -N 4 -T 1 --player 2 --prep-dir /opt/elements tutorial & ${program} -N 4 -T 1 --player 3 --prep-dir /opt/elements tutorial
