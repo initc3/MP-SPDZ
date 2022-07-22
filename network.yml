@@ -1,5 +1,9 @@
 version: "3.9"
 
+# TODO
+# Mount SSL keys. Each node should only have its private key, and the public
+# keys of the other members.
+
 services:
   node0:
     image: mp-spdz

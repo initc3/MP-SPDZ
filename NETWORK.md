@@ -43,6 +43,17 @@ malicious-shamir-party.x --prime $PRIME --ip-file-name network.config --nparties
 > When using a network configuration file, it is not clear whether MP-SPDZ still requires a coordination server.
 
 
+## Example with docker-compose
+The docker compose file, `network.yml` can be used to run a small network of three nodes.
+
+```shell
+docker-compose --file network.yml up
+```
+
+> **Note**
+The SSL keys used for encrypting messages are all in the same images for convenience, for prototyping, in a research context. Each node should only have its own private key, and the public keys of the other members. The `network.yml` and related `Dockerfile`will be modified to reflect this.
+
+
 ## Encryption
 When using honest majority protocols such as shamir secret sharing, communication between nodes is encrypted. It's possible to disable encryption via the command-line argument `-u` or `--unencrypted`. However, this can only work if the offline phase (preprocessing) is insecure, meaning that it's "fake".
 
