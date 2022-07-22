@@ -1,0 +1,62 @@
+program.bit_length = 32
+
+def mask():
+    print_ln("Waiting for mask input")
+    mask_share = sint.get_input_from(0)
+    sint.write_to_file(mask_share)
+
+    mask = mask_share.reveal()
+    print_ln("mask: %s", mask)
+
+    secret = 10
+    masked_secret = 10 + mask
+    print_ln("masked_secret: %s", masked_secret)
+    _secret = masked_secret - mask_share
+    print_ln("_secret: %s", _secret.reveal())
+
+
+def mask_from_file():
+    mask_share = sint.read_from_file(0, 1)[1][0]
+
+    mask = mask_share.reveal()
+    print_ln("mask: %s", mask)
+
+    #secret = 10
+    #masked_secret = 10 + mask
+    #print_ln("masked_secret: %s", masked_secret)
+    #_secret = masked_secret - mask_share
+    #print_ln("_secret: %s", _secret.reveal())
+
+
+def average():
+    print_ln("Waiting for mask input")
+    mask_share = sint.get_input_from(0)
+
+    mask = mask_share.reveal()
+    print_ln("mask: %s", mask)
+
+    print_ln("Waiting for Alice's input")
+    alice_share = sint.get_input_from(1)
+    masked_alice = alice_share.reveal() + mask
+    print_ln("masked_alice: %s", masked_alice)
+    _alice = masked_alice - mask_share
+    print_ln("_alice: %s", _alice.reveal())
+
+    print_ln("Waiting for Bob's input")
+    bob_share = sint.get_input_from(2)
+    masked_bob = bob_share.reveal() + mask
+    _bob = masked_bob - mask_share
+    print_ln("_bob: %s", _bob.reveal())
+    
+    print_ln("Waiting for Carol's input")
+    carol_share = sint.get_input_from(3)
+    masked_carol = carol_share.reveal() + mask
+    _carol = masked_carol - mask_share
+
+    ave0 = (_alice + _bob + _carol) / 3
+    #ave0 = (_alice + _bob) / 2
+    print_ln('The average is: %s', ave0.reveal())
+
+mask()
+mask_from_file()
+#average()
