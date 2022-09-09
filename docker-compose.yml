@@ -13,7 +13,8 @@ services:
         cryptoplayers: 3
         gfp_mod_sz: 4
         compile_options: "-v -C --field=256"
-        src: average
+        src: tutorial
+    platform: "linux/amd64"
     environment:
       PREP_DIR: ${PREP_DIR}
       PRIME: ${PRIME}
