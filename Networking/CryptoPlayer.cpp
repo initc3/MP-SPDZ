@@ -94,8 +94,10 @@ CryptoPlayer::CryptoPlayer(const Names& Nms, const string& id_base) :
         }
         if (N.get_name(i).empty()) continue;
 
-        senders[i] = new Sender<ssl_socket*>(i < my_num() ? sockets[i] : other_sockets[i]);
-        receivers[i] = new Receiver<ssl_socket*>(i < my_num() ? other_sockets[i] : sockets[i]);
+//        senders[i] = new Sender<ssl_socket*>(i < my_num() ? sockets[i] : other_sockets[i]);
+//        receivers[i] = new Receiver<ssl_socket*>(i < my_num() ? other_sockets[i] : sockets[i]);
+        senders[i] = new Sender<ssl_socket*>(i < my_num() ? sockets[i] : other_sockets[i], "P" + to_string(my_num()), "P" + to_string(i));
+        receivers[i] = new Receiver<ssl_socket*>(i < my_num() ? other_sockets[i] : sockets[i], "P" + to_string(i), "P" + to_string(my_num()));
     }
 }
 

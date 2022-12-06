@@ -14,6 +14,8 @@
 #include "Tools/time-func.h"
 #include "Tools/FlexBuffer.h"
 
+#include "Networking/data.h"
+#include "Networking/colink-vt-dummy.h"
 
 void octetStream::reset()
 {
@@ -265,3 +267,27 @@ void octetStreams::reset(const Player& P)
 
 template void octetStream::exchange(int, int, octetStream&) const;
 template void octetStream::exchange(ssl_socket*, ssl_socket*, octetStream&) const;
+
+
+void octetStream::Send(string sender, string receiver, int cnt) const
+{
+    octet blen[LENGTH_SIZE];
+    encode_length(blen, len, LENGTH_SIZE);
+    vector<uint8_t> vlen(blen, blen + LENGTH_SIZE);
+    set_variable("T0", "len" + sender + receiver + to_string(cnt), vlen, sender, {receiver});
+    vector<uint8_t> vdata(data, data + len);
+    set_variable("T0", "data" + sender + receiver + to_string(cnt), vdata, sender, {receiver});
+}
+
+void octetStream::Receive(string sender, string receiver, int cnt)
+{
+    size_t nlen=0;
+    nlen = decode_length(&get_variable("T0", "len" + sender + receiver + to_string(cnt), sender, receiver)[0], LENGTH_SIZE);
+    len=0;
+    resize_min(nlen);
+    len=nlen;
+
+    vector<uint8_t> vdata = get_variable("T0", "data" + sender + receiver + to_string(cnt), sender, receiver);
+    std::copy(vdata.begin(), vdata.end(), data);
+    reset_read_head();
+}

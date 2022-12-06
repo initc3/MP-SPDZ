@@ -16,6 +16,9 @@ template<class T>
 class Receiver
 {
     T socket;
+    string sender;
+    string receiver;
+    int cnt;
     WaitQueue<octetStream*> in;
     WaitQueue<octetStream*> out;
     pthread_t thread;
@@ -33,6 +36,7 @@ public:
     Timer timer;
 
     Receiver(T socket);
+    Receiver(T socket, string sender, string receiver);
     ~Receiver();
 
     void request(octetStream& os);
