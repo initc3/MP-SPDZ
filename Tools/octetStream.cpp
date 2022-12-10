@@ -281,8 +281,10 @@ void octetStream::Send(string sender, string receiver, int cnt) const
 
 void octetStream::Receive(string sender, string receiver, int cnt)
 {
-    size_t nlen=0;
-    nlen = decode_length(&get_variable("T0", "len" + sender + receiver + to_string(cnt), sender, receiver)[0], LENGTH_SIZE);
+    octet blen[LENGTH_SIZE];
+    auto r = get_variable("T0", "len" + sender + receiver + to_string(cnt), sender, receiver);
+    std::copy(r.begin(), r.end(), blen);
+    size_t nlen = decode_length(blen, LENGTH_SIZE);
     len=0;
     resize_min(nlen);
     len=nlen;
