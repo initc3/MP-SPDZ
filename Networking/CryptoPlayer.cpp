@@ -92,14 +92,18 @@ CryptoPlayer::CryptoPlayer(const Names& Nms, const string& id_base) :
             receivers[i] = 0;
             continue;
         }
+        if (N.get_name(i).empty()) continue;
 
-        senders[i] = new Sender<ssl_socket*>(i < my_num() ? sockets[i] : other_sockets[i]);
-        receivers[i] = new Receiver<ssl_socket*>(i < my_num() ? other_sockets[i] : sockets[i]);
+//        senders[i] = new Sender<ssl_socket*>(i < my_num() ? sockets[i] : other_sockets[i]);
+//        receivers[i] = new Receiver<ssl_socket*>(i < my_num() ? other_sockets[i] : sockets[i]);
+        senders[i] = new Sender<ssl_socket*>(i < my_num() ? sockets[i] : other_sockets[i], "P" + to_string(my_num()), "P" + to_string(i));
+        receivers[i] = new Receiver<ssl_socket*>(i < my_num() ? other_sockets[i] : sockets[i], "P" + to_string(i), "P" + to_string(my_num()));
     }
 }
 
 void CryptoPlayer::connect(int i, vector<int>* plaintext_sockets)
 {
+    if (N.get_name(i).empty()) return;
     sockets[i] = new ssl_socket(io_service, ctx, plaintext_sockets[0][i],
             "P" + to_string(i), "P" + to_string(my_num()), i < my_num());
     other_sockets[i] = new ssl_socket(io_service, ctx, plaintext_sockets[1][i],
@@ -187,6 +191,8 @@ void CryptoPlayer::send_receive_all_no_stats(const vector<vector<bool>>& channel
     for (int offset = 1; offset < num_players(); offset++)
     {
         int other = get_player(offset);
+        if (N.get_name(other).empty()) continue;
+        // TODO: send to offline nodes
         bool receive = channels[other][my_num()];
         if (channels[my_num()][other])
             this->senders[other]->request(to_send[other]);
@@ -196,6 +202,8 @@ void CryptoPlayer::send_receive_all_no_stats(const vector<vector<bool>>& channel
     for (int offset = 1; offset < num_players(); offset++)
     {
         int other = get_player(offset);
+        if (N.get_name(other).empty()) continue;
+        // TODO: send to offline nodes
         bool receive = channels[other][my_num()];
         if (channels[my_num()][other])
             this->senders[other]->wait(to_send[other]);
@@ -212,6 +220,7 @@ void CryptoPlayer::partial_broadcast(const vector<bool>& my_senders,
     for (int offset = 1; offset < num_players(); offset++)
     {
         int other = get_player(offset);
+        if (N.get_name(other).empty()) continue;
         bool receive = my_senders[other];
         if (my_receivers[other])
         {
@@ -224,6 +233,7 @@ void CryptoPlayer::partial_broadcast(const vector<bool>& my_senders,
     for (int offset = 1; offset < num_players(); offset++)
     {
         int other = get_player(offset);
+        if (N.get_name(other).empty()) continue;
         bool receive = my_senders[other];
         if (my_receivers[other])
             this->senders[other]->wait(os[my_num()]);
@@ -237,6 +247,7 @@ void CryptoPlayer::Broadcast_Receive_no_stats(vector<octetStream>& os) const
     for (int offset = 1; offset < num_players(); offset++)
     {
         int other = get_player(offset);
+        if (N.get_name(other).empty()) continue;
         this->senders[other]->request(os[my_num()]);
         receivers[other]->request(os[other]);
     }
@@ -244,6 +255,7 @@ void CryptoPlayer::Broadcast_Receive_no_stats(vector<octetStream>& os) const
     for (int offset = 1; offset < num_players(); offset++)
     {
         int other = get_player(offset);
+        if (N.get_name(other).empty()) continue;
         this->senders[other]->wait(os[my_num()]);
         receivers[other]->wait(os[other]);
     }

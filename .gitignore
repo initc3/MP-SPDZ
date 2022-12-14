@@ -119,3 +119,6 @@ _build/
 
 # environment
 .env
+.idea/
+cmake-build-debug/
+log_*.txt

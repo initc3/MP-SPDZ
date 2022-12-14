@@ -13,7 +13,8 @@ services:
         cryptoplayers: 3
         gfp_mod_sz: 4
         compile_options: "-v -C --field=256"
-        src: average
+        src: tutorial
+    platform: "linux/amd64"
     environment:
       PREP_DIR: ${PREP_DIR}
       PRIME: ${PRIME}
@@ -24,3 +25,15 @@ services:
       - ./Makefile:/usr/src/MP-SPDZ/Makefile
       - ./Programs/Source:/usr/src/MP-SPDZ/Programs/Source
       - ./Scripts:/usr/src/MP-SPDZ/Scripts
+      - ./Networking:/usr/src/MP-SPDZ/Networking
+      - ./Machines:/usr/src/MP-SPDZ/Machines
+      - ./Protocols:/usr/src/MP-SPDZ/Protocols
+      - ./Processor:/usr/src/MP-SPDZ/Processor
+      - ./Math:/usr/src/MP-SPDZ/Math
+      - ./Tools:/usr/src/MP-SPDZ/Tools
+      - ./log_0.txt:/usr/src/MP-SPDZ/log_0.txt
+      - ./log_1.txt:/usr/src/MP-SPDZ/log_1.txt
+      - ./log_2.txt:/usr/src/MP-SPDZ/log_2.txt
+      - ./log_3.txt:/usr/src/MP-SPDZ/log_3.txt
+      - ./mal-shamir-offline.x:/usr/src/MP-SPDZ/mal-shamir-offline.x
+    command: tail -F anything

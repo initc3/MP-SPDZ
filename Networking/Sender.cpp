@@ -23,6 +23,12 @@ Sender<T>::Sender(T socket) : socket(socket), thread(0)
 }
 
 template<class T>
+Sender<T>::Sender(T socket, string sender, string receiver) : socket(socket), sender(sender), receiver(receiver), cnt(0), thread(0)
+{
+    start();
+}
+
+template<class T>
 Sender<T>::~Sender()
 {
     stop();
@@ -51,7 +57,8 @@ void Sender<T>::run()
         timer.start();
         RunningTimer mytimer;
 #endif
-        os->Send(socket);
+        if (sender.empty()) os->Send(socket);
+        else os->Send(sender, receiver, ++cnt);
 #ifdef VERBOSE_SSL
         cout << "sending " << os->get_length() * 1e-6 << " MB on " << socket
                 << " took " << mytimer.elapsed() << ", total "

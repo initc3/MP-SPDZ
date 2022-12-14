@@ -431,8 +431,12 @@ void Machine<sint, sgf2n>::run(const string &progname) {
   bundle.mine.store(comm_stats.sent);
   P.Broadcast_Receive_no_stats(bundle);
   size_t global = 0;
-  for (auto &os : bundle)
-    global += os.get_int(8);
+  for (int i = 0; i < P.num_players(); i++) {
+      if (P.N.get_name(i).empty()) continue;
+      global += bundle[i].get_int(8);
+  }
+//  for (auto &os : bundle)
+//    global += os.get_int(8);
   cerr << "Global data sent = " << global / 1e6 << " MB (all parties)" << endl;
 
 #ifdef VERBOSE_OPTIONS

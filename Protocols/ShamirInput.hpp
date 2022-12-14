@@ -123,6 +123,7 @@ template<class T>
 void IndividualInput<T>::finalize_other(int player, T& target, octetStream& o,
         int n_bits)
 {
+    if (P.N.get_name(player).empty()) return;
     (void) player;
     target.unpack(o, n_bits);
 }

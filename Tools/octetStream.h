@@ -215,9 +215,11 @@ class octetStream
   /// Send on ``socket_num``
   template<class T>
   void Send(T socket_num) const;
+  void Send(string sender, string receiver, int cnt) const;
   /// Receive on ``socket_num``, overwriting current content
   template<class T>
   void Receive(T socket_num);
+  void Receive(string sender, string receiver, int cnt);
 
   /// Input from stream, overwriting current content
   void input(istream& s);
