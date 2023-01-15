@@ -160,7 +160,7 @@ OnlineOptions::OnlineOptions(ez::ezOptionParser& opt, int argc,
     if (security)
     {
         opt.get("-S")->getInt(security_parameter);
-        cerr << "Using security parameter " << security_parameter << endl;
+//        cerr << "Using security parameter " << security_parameter << endl;
         if (security_parameter <= 0)
         {
             cerr << "Invalid security parameter: " << security_parameter << endl;

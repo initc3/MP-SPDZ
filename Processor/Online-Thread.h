@@ -18,6 +18,7 @@ class thread_info
 
   int thread_num;
   Names*  Nms;
+  Player* player;
   typename sgf2n::mac_key_type *alpha2i;
   typename sint::mac_key_type *alphapi;
 
