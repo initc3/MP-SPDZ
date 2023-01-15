@@ -1,8 +1,11 @@
+
 version: '3.8'
 
 services:
   mp-spdz:
     image: mp-spdz
+    cap_add:
+      - NET_ADMIN
     build:
       context: .
       dockerfile: Dockerfile
@@ -36,4 +39,6 @@ services:
       - ./log_2.txt:/usr/src/MP-SPDZ/log_2.txt
       - ./log_3.txt:/usr/src/MP-SPDZ/log_3.txt
       - ./mal-shamir-offline.x:/usr/src/MP-SPDZ/mal-shamir-offline.x
+      - ./latency-control.sh:/usr/src/MP-SPDZ/latency-control.sh
+      - ./test/:/usr/src/MP-SPDZ/test/
     command: tail -F anything

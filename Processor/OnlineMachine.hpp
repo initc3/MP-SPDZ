@@ -200,14 +200,14 @@ int OnlineMachine::run()
     {
         Machine<T, U>(playerNames, use_encryption, online_opts, lg2).run(
                 online_opts.progname);
-
-        if (online_opts.verbose)
-          {
-            cerr << "Command line:";
-            for (int i = 0; i < argc; i++)
-              cerr << " " << argv[i];
-            cerr << endl;
-          }
+                
+//        if (online_opts.verbose)
+//          {
+//            cerr << "Command line:";
+//            for (int i = 0; i < argc; i++)
+//              cerr << " " << argv[i];
+//            cerr << endl;
+//          }
     }
 #ifndef INSECURE
     catch(...)

@@ -277,6 +277,8 @@ PlayerBase::~PlayerBase()
 void PlainPlayer::setup_sockets(const vector<string>& names,
         const vector<int>& ports, const string& id_base, ServerSocket& server)
 {
+    vector<thread> threads;
+
     sockets.resize(nplayers);
     // Set up the client side
     for (int i=player_no; i<nplayers; i++) {
@@ -289,14 +291,27 @@ void PlainPlayer::setup_sockets(const vector<string>& names,
               "Setting up send to self socket to %s:%d with id %s\n",
               localhost, ports[i], pn.c_str());
 #endif
-          set_up_client_socket(sockets[i],localhost,ports[i]);
+//          set_up_client_socket(sockets[i],localhost,ports[i]);
+            threads.push_back(thread(set_up_client_socket, std::ref(sockets[i]),localhost,ports[i]));
         } else {
 #ifdef DEBUG_NETWORKING
             fprintf(stderr, "Setting up client to %s:%d with id %s\n",
                 names[i].c_str(), ports[i], pn.c_str());
 #endif
-          set_up_client_socket(sockets[i],names[i].c_str(),ports[i]);
+//          set_up_client_socket(sockets[i],names[i].c_str(),ports[i]);
+            threads.push_back(thread(set_up_client_socket, std::ref(sockets[i]),names[i].c_str(),ports[i]));
         }
+//        octetStream(pn).Send(sockets[i]);
+    }
+
+    for (int i = 0; i < int(threads.size()); i++) {
+        threads[i].join();
+    }
+
+    for (int i=player_no; i<nplayers; i++) {
+        if (names[i].empty()) continue;
+        auto pn=id_base+"P"+to_string(player_no);
+//        threads[i].join();
         octetStream(pn).Send(sockets[i]);
     }
     send_to_self_socket = sockets[player_no];

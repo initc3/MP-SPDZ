@@ -45,32 +45,32 @@ void thread_info<sint, sgf2n>::Sub_Main_Func()
   auto& queues = machine.queues[num];
   queues->next();
 
-#ifdef DEBUG_THREADS
-  fprintf(stderr, "\tI am in thread %d\n",num);
-#endif
-  Player* player;
-  string id = "thread" + to_string(num);
-  if (machine.use_encryption)
-    {
-#ifdef VERBOSE_OPTIONS
-      cerr << "Using encrypted single-threaded communication" << endl;
-#endif
-      player = new CryptoPlayer(*(tinfo->Nms), id);
-    }
-  else if (!machine.receive_threads or machine.direct)
-    {
-#ifdef VERBOSE_OPTIONS
-      cerr << "Using single-threaded receiving" << endl;
-#endif
-      player = new PlainPlayer(*(tinfo->Nms), id);
-    }
-  else
-    {
-#ifdef VERBOSE_OPTIONS
-      cerr << "Using player-specific threads for receiving" << endl;
-#endif
-      player = new ThreadPlayer(*(tinfo->Nms), id);
-    }
+//#ifdef DEBUG_THREADS
+//  fprintf(stderr, "\tI am in thread %d\n",num);
+//#endif
+//  Player* player;
+//  string id = "thread" + to_string(num);
+//  if (machine.use_encryption)
+//    {
+//#ifdef VERBOSE_OPTIONS
+//      cerr << "Using encrypted single-threaded communication" << endl;
+//#endif
+//      player = new CryptoPlayer(*(tinfo->Nms), id);
+//    }
+//  else if (!machine.receive_threads or machine.direct)
+//    {
+//#ifdef VERBOSE_OPTIONS
+//      cerr << "Using single-threaded receiving" << endl;
+//#endif
+//      player = new PlainPlayer(*(tinfo->Nms), id);
+//    }
+//  else
+//    {
+//#ifdef VERBOSE_OPTIONS
+//      cerr << "Using player-specific threads for receiving" << endl;
+//#endif
+//      player = new ThreadPlayer(*(tinfo->Nms), id);
+//    }
   Player& P = *player;
 #ifdef DEBUG_THREADS
   fprintf(stderr, "\tSet up player in thread %d\n",num);
@@ -327,7 +327,7 @@ void thread_info<sint, sgf2n>::Sub_Main_Func()
 
   delete MC2;
   delete MCp;
-  delete player;
+//  delete player;
 
 #if OPENSSL_VERSION_NUMBER >= 0x10100000L
   OPENSSL_thread_stop();
