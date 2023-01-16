@@ -205,4 +205,5 @@ int generate(ezOptionParser& opt, int nparties)
     T::LivePrep::teardown();
 
     cerr << "total_time " << timer.elapsed() << endl;
+    return 0;
 }
