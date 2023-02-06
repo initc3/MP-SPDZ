@@ -26,6 +26,9 @@ void Usage(ez::ezOptionParser &opt) {
 };
 
 int main(int argc, const char **argv) {
+    Timer timer;
+    timer.start();
+
   auto &opts = ShamirOptions::singleton;
   ez::ezOptionParser opt;
   opts = {opt, argc, argv};
@@ -90,6 +93,7 @@ int main(int argc, const char **argv) {
     cerr << "Use shamir or malshamir" << endl;
     exit(1);
   }
+    cerr << "total_time " << timer.elapsed() << endl;
 }
 
 template <class T>
@@ -122,7 +126,9 @@ void run(ez::ezOptionParser &opt, bigint prime, int prime_length) {
 
   int ntriples = nshares / 2 + nshares % 2;
   vector<T> Sa(ntriples), Sb(ntriples), Sc(ntriples);
-  for (int i = 0; i < ntriples; i++) {
+preprocessing.buffer_size = nshares;
+int nused = 1;
+  for (int i = 0; i < nused; i++) {
     preprocessing.get_three(DATA_TRIPLE, Sa[i], Sb[i], Sc[i]);
     Sa[i].output(outputFile, true);
     if (i == ntriples - 1 && nshares % 2)
