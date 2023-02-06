@@ -124,7 +124,6 @@ int generate(ezOptionParser& opt, int nparties)
 {
     Timer timer;
     timer.start();
-
     // needed because of bug in some gcc versions < 9
     // https://gitter.im/MP-SPDZ/community?at=5fcadf535be1fb21c5fce581
     //bigint::init_thread();
