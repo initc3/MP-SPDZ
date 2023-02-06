@@ -29,10 +29,11 @@ set -x
 # Interface to shape
 IF=lo
 # Average to delay packets by
-LATENCY=$2
+LATENCY=100ms
+JITTER=5ms
 
-players=$3
-concurrency=$4
+players=4
+concurrency=1
 
 limit_port() {
   echo 'limit_port' $1
@@ -53,7 +54,7 @@ start() {
   # Create a priority-based queue.
   tc qdisc add dev $IF root handle 1: prio
   # Delay everything in band 3
-  tc qdisc add dev $IF parent 1:3 handle 30: netem delay $LATENCY
+  tc qdisc add dev $IF parent 1:3 handle 30: netem delay $LATENCY $JITTER
 
   # http server ports
   for (( port = 4000; port < $(($players + 4000)); port++ )) do
