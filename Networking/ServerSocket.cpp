@@ -58,7 +58,7 @@ ServerSocket::ServerSocket(int Portnum) : portnum(Portnum), thread(0)
           cerr << "Binding to socket on " << my_name << ":" << Portnum
               << " failed (" << strerror(errno)
               << "), trying again in a second ..." << endl;
-          sleep(1);
+          usleep(1000);
         }
 #ifdef DEBUG_NETWORKING
       else
