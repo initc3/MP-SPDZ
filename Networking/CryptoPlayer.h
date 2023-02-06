@@ -41,6 +41,8 @@ public:
     CryptoPlayer(const Names& Nms, int id_base = 0);
     ~CryptoPlayer();
 
+    static void create_plain_player(const Names& Nms, const string& id_base, int i, vector<int>& plaintext_sockets, int my_num);
+
     bool is_encrypted() { return true; }
 
     void send_to_no_stats(int other, const octetStream& o) const;

@@ -27,7 +27,7 @@ void Create_Random(T& ans,const Player& P)
 
   ans.assign_zero();
   for (int i = 0; i < P.num_players(); i++)
-    { if (i != P.my_num())
+    { if (i != P.my_num() && !P.N.get_name(i).empty())
         { if (!Open(ee,Comm_e[i],Open_e[i],i))
              { throw invalid_commitment(); }
           e[i].unpack(ee);

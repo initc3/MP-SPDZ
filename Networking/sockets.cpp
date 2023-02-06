@@ -38,7 +38,7 @@ void set_up_client_socket(int& mysocket,const char* hostname,int Portnum)
            "' for " << hostname << ", trying again in a second ..." << endl;
            if (ai)
              freeaddrinfo(ai);
-           sleep(1);
+           usleep(1000);
          }
      }
    if (erp!=0)

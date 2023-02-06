@@ -162,6 +162,7 @@ void Machine<sint, sgf2n>::prepare(const string &progname_str) {
     tinfo[i].alphapi = &alphapi;
     tinfo[i].alpha2i = &alpha2i;
     tinfo[i].machine = this;
+    tinfo[i].player = P;
     pthread_create(&threads[i], NULL, thread_info<sint, sgf2n>::Main_Func,
                    &tinfo[i]);
   }
@@ -381,32 +382,32 @@ void Machine<sint, sgf2n>::run(const string &progname) {
   // run main tape
   run_tape(0, 0, 0, N.num_players());
   join_tape(0);
+  
+//  print_compiler();
 
-  print_compiler();
-
-  finish_timer.start();
+//  finish_timer.start();
 
   // actual usage
   auto res = stop_threads();
   DataPositions &pos = res.first;
 
-  finish_timer.stop();
-
-#ifdef VERBOSE
-  cerr << "Memory usage: ";
-  tinfo[0].print_usage(cerr, Mp.MS, "sint");
-  tinfo[0].print_usage(cerr, Mp.MC, "cint");
-  tinfo[0].print_usage(cerr, M2.MS, "sgf2n");
-  tinfo[0].print_usage(cerr, M2.MS, "cgf2n");
-  tinfo[0].print_usage(cerr, bit_memories.MS, "sbits");
-  tinfo[0].print_usage(cerr, bit_memories.MC, "cbits");
-  tinfo[0].print_usage(cerr, Mi.MC, "regint");
-  cerr << endl;
-
-  for (unsigned int i = 0; i < join_timer.size(); i++)
-    cerr << "Join timer: " << i << " " << join_timer[i].elapsed() << endl;
-  cerr << "Finish timer: " << finish_timer.elapsed() << endl;
-#endif
+//  finish_timer.stop();
+//
+//#ifdef VERBOSE
+//  cerr << "Memory usage: ";
+//  tinfo[0].print_usage(cerr, Mp.MS, "sint");
+//  tinfo[0].print_usage(cerr, Mp.MC, "cint");
+//  tinfo[0].print_usage(cerr, M2.MS, "sgf2n");
+//  tinfo[0].print_usage(cerr, M2.MS, "cgf2n");
+//  tinfo[0].print_usage(cerr, bit_memories.MS, "sbits");
+//  tinfo[0].print_usage(cerr, bit_memories.MC, "cbits");
+//  tinfo[0].print_usage(cerr, Mi.MC, "regint");
+//  cerr << endl;
+//
+//  for (unsigned int i = 0; i < join_timer.size(); i++)
+//    cerr << "Join timer: " << i << " " << join_timer[i].elapsed() << endl;
+//  cerr << "Finish timer: " << finish_timer.elapsed() << endl;
+//#endif
 
   NamedCommStats &comm_stats = res.second;
 
@@ -431,8 +432,12 @@ void Machine<sint, sgf2n>::run(const string &progname) {
   bundle.mine.store(comm_stats.sent);
   P.Broadcast_Receive_no_stats(bundle);
   size_t global = 0;
-  for (auto &os : bundle)
-    global += os.get_int(8);
+  for (int i = 0; i < P.num_players(); i++) {
+      if (P.N.get_name(i).empty()) continue;
+      global += bundle[i].get_int(8);
+  }
+//  for (auto &os : bundle)
+//    global += os.get_int(8);
   cerr << "Global data sent = " << global / 1e6 << " MB (all parties)" << endl;
 
 #ifdef VERBOSE_OPTIONS
@@ -493,13 +498,14 @@ void Machine<sint, sgf2n>::run(const string &progname) {
     stats.print();
   }
 
-  if (not opts.file_prep_per_thread) {
-    Data_Files<sint, sgf2n> df(*this);
-    df.seekg(pos);
-    df.prune();
-  }
+//  if (not opts.file_prep_per_thread) {
+//    Data_Files<sint, sgf2n> df(*this);
+//    df.seekg(pos);
+//    df.prune();
+//  }
 
-  suggest_optimizations();
+//  suggest_optimizations();
+
 
 #ifdef VERBOSE
   cerr << "End of prog" << endl;

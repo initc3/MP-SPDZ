@@ -277,9 +277,12 @@ PlayerBase::~PlayerBase()
 void PlainPlayer::setup_sockets(const vector<string>& names,
         const vector<int>& ports, const string& id_base, ServerSocket& server)
 {
+    vector<thread> threads;
+
     sockets.resize(nplayers);
     // Set up the client side
     for (int i=player_no; i<nplayers; i++) {
+        if (names[i].empty()) continue;
         auto pn=id_base+"P"+to_string(player_no);
         if (i==player_no) {
           const char* localhost = "127.0.0.1";
@@ -288,19 +291,33 @@ void PlainPlayer::setup_sockets(const vector<string>& names,
               "Setting up send to self socket to %s:%d with id %s\n",
               localhost, ports[i], pn.c_str());
 #endif
-          set_up_client_socket(sockets[i],localhost,ports[i]);
+//          set_up_client_socket(sockets[i],localhost,ports[i]);
+            threads.push_back(thread(set_up_client_socket, std::ref(sockets[i]),localhost,ports[i]));
         } else {
 #ifdef DEBUG_NETWORKING
             fprintf(stderr, "Setting up client to %s:%d with id %s\n",
                 names[i].c_str(), ports[i], pn.c_str());
 #endif
-          set_up_client_socket(sockets[i],names[i].c_str(),ports[i]);
+//          set_up_client_socket(sockets[i],names[i].c_str(),ports[i]);
+            threads.push_back(thread(set_up_client_socket, std::ref(sockets[i]),names[i].c_str(),ports[i]));
         }
+//        octetStream(pn).Send(sockets[i]);
+    }
+
+    for (int i = 0; i < int(threads.size()); i++) {
+        threads[i].join();
+    }
+
+    for (int i=player_no; i<nplayers; i++) {
+        if (names[i].empty()) continue;
+        auto pn=id_base+"P"+to_string(player_no);
+//        threads[i].join();
         octetStream(pn).Send(sockets[i]);
     }
     send_to_self_socket = sockets[player_no];
     // Setting up the server side
     for (int i=0; i<=player_no; i++) {
+        if (names[i].empty()) continue;
         auto id=id_base+"P"+to_string(i);
 #ifdef DEBUG_NETWORKING
         fprintf(stderr,
@@ -311,6 +328,7 @@ void PlainPlayer::setup_sockets(const vector<string>& names,
     }
 
     for (int i = 0; i < nplayers; i++) {
+        if (names[i].empty()) continue;
         // timeout of 5 minutes
         struct timeval tv;
         tv.tv_sec = 300;
@@ -359,7 +377,7 @@ void Player::send_all(const octetStream& o) const
 {
   TimeScope ts(comm_stats["Sending to all"].add(o));
   for (int i=0; i<nplayers; i++)
-     { if (i!=player_no)
+     { if (i!=player_no && !N.names[i].empty())
          send_to_no_stats(i, o);
      }
   sent += o.get_length() * (num_players() - 1);
@@ -479,7 +497,9 @@ void MultiPlayer<T>::Broadcast_Receive_no_stats(vector<octetStream>& o) const
   for (int i=1; i<nplayers; i++)
     {
       int send_to = (my_num() + i) % num_players();
+      while (!N.get_name(send_to).empty()) send_to = (send_to + 1) % num_players();
       int receive_from = (my_num() + num_players() - i) % num_players();
+      while (!N.get_name(receive_from).empty()) receive_from = (receive_from - 1) % num_players();
       exchangers.push_back({sockets[send_to], o[my_num()], sockets[receive_from], o[receive_from]});
     }
 
@@ -503,7 +523,7 @@ void Player::Broadcast_Receive(vector<octetStream>& o) const
 {
   unchecked_broadcast(o);
     { for (int i=0; i<nplayers; i++)
-        { hash_update(&ctx,o[i].get_data(),o[i].get_length()); }
+        if (!N.get_name(i).empty()) { hash_update(&ctx,o[i].get_data(),o[i].get_length()); }
     }
 }
 
@@ -517,7 +537,7 @@ void Player::Check_Broadcast() const
 
   unchecked_broadcast(h);
   for (int i=0; i<nplayers; i++)
-    { if (i!=player_no)
+    { if (i!=player_no && !N.get_name(i).empty())
         { if (!h[i].equals(h[player_no]))
 	    { throw broadcast_invalid(); }
         }

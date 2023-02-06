@@ -37,11 +37,7 @@ int main(int argc, const char** argv)
 		0, // Number of args expected.
 		0, // Delimiter if expecting multiple args.
 		"Display usage instructions.", // Help description.
-<<<<<<< HEAD
-		"-h",     // Flag token. 
-=======
 		"-h",     // Flag token.
->>>>>>> eed779bb (add testing for offline phase benchmarking)
 		"-help",  // Flag token.
 		"--help", // Flag token.
 		"--usage" // Flag token.
@@ -198,7 +194,7 @@ int generate(ezOptionParser& opt, int nparties)
     vector<T> bits(nused);
     for (int i=0; i < nused; i++)
     {
-        bits[i] = preprocessing.get_bit();
+        bits[i] = preprocessing.get_random();
         bits[i].output(outputFile, true);
         if (i != nused - 1)
             outputFile << "\n";

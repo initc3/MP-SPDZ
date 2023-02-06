@@ -1,8 +1,11 @@
+
 version: '3.8'
 
 services:
   mp-spdz:
     image: mp-spdz
+    cap_add:
+      - NET_ADMIN
     build:
       context: .
       dockerfile: Dockerfile
@@ -13,7 +16,8 @@ services:
         cryptoplayers: 3
         gfp_mod_sz: 4
         compile_options: "-v -C --field=256"
-        src: average
+        src: tutorial
+    platform: "linux/amd64"
     environment:
       PREP_DIR: ${PREP_DIR}
       PRIME: ${PRIME}
@@ -22,5 +26,24 @@ services:
       - ./Compiler:/usr/src/MP-SPDZ/Compiler
       - ./CONFIG:/usr/src/MP-SPDZ/CONFIG
       - ./Makefile:/usr/src/MP-SPDZ/Makefile
+      - ./Utils:/usr/src/MP-SPDZ/Utils
       - ./Programs/Source:/usr/src/MP-SPDZ/Programs/Source
       - ./Scripts:/usr/src/MP-SPDZ/Scripts
+      - ./Networking:/usr/src/MP-SPDZ/Networking
+      - ./Machines:/usr/src/MP-SPDZ/Machines
+      - ./Protocols:/usr/src/MP-SPDZ/Protocols
+      - ./Processor:/usr/src/MP-SPDZ/Processor
+      - ./Math:/usr/src/MP-SPDZ/Math
+      - ./Tools:/usr/src/MP-SPDZ/Tools
+      - ./log_0.txt:/usr/src/MP-SPDZ/log_0.txt
+      - ./log_1.txt:/usr/src/MP-SPDZ/log_1.txt
+      - ./log_2.txt:/usr/src/MP-SPDZ/log_2.txt
+      - ./log_3.txt:/usr/src/MP-SPDZ/log_3.txt
+#      - ./mal-shamir-offline.x:/usr/src/MP-SPDZ/mal-shamir-offline.x
+#      - ./malicious-shamir-party.x:/usr/src/MP-SPDZ/malicious-shamir-party.x
+#      - ./random-shamir.x:/usr/src/MP-SPDZ/random-shamir.x
+#      - ./random-bits.x:/usr/src/MP-SPDZ/random-bits.x
+#      - ./libSPDZ.so:/usr/src/MP-SPDZ/libSPDZ.so
+      - ./latency-control.sh:/usr/src/MP-SPDZ/latency-control.sh
+      - ./test/:/usr/src/MP-SPDZ/test/
+    command: tail -F anything

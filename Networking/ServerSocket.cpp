@@ -58,7 +58,7 @@ ServerSocket::ServerSocket(int Portnum) : portnum(Portnum), thread(0)
           cerr << "Binding to socket on " << my_name << ":" << Portnum
               << " failed (" << strerror(errno)
               << "), trying again in a second ..." << endl;
-          sleep(1);
+          usleep(1000);
         }
 #ifdef DEBUG_NETWORKING
       else
@@ -196,7 +196,12 @@ int ServerSocket::get_connection_socket(const string& id)
   while (clients.find(id) == clients.end())
   {
       if (data_signal.wait(60) == ETIMEDOUT)
-          throw runtime_error("No client after one minute");
+//          throw runtime_error("No client after one minute");
+
+        {
+          cerr << id << " is not present after one minute" << endl;
+          break;
+        }
   }
 
   int client_socket = clients[id];

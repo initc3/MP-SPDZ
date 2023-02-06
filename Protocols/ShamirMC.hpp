@@ -81,19 +81,42 @@ template<class T>
 void ShamirMC<T>::POpen(vector<typename T::open_type>& values, const vector<T>& S,
         const Player& P)
 {
+cerr << "begin ShamirMC<T>::POpen" << endl;
     prepare(S, P);
+    cerr << "1" << endl;
     exchange(P);
+    cerr << "2" << endl;
     finalize(values, S);
+    cerr << "end ShamirMC<T>::POpen" << endl;
 }
 
 template<class T>
 void ShamirMC<T>::exchange(const Player& P)
 {
-    vector<bool> my_senders(P.num_players()), my_receivers(P.num_players());
+    vector<bool> my_senders(P.num_players()), my_receivers(P.num_players());\
+//    for (int i = 0; i < P.num_players(); i++)
+//    {
+//        my_senders[i] = P.get_offset(i) <= threshold;
+//        my_receivers[i] = P.get_offset(i) >= P.num_players() - threshold;
+//    }
+//    for (int i = 0, ofs = 0, idx = P.get_player(ofs); i <= threshold; i++) {
+//        my_senders[idx] = 1;
+//        do {
+//            ofs++;
+//            idx = P.get_player(ofs);
+//        } while (P.N.get_name(idx).empty());
+//    }
+//    for (int i = 0, ofs = P.num_players() - 1, idx = P.get_player(ofs); i < P.num_players() - threshold; i++, ofs--, idx = P.get_player(ofs)) {
+//        while (P.N.get_name(idx).empty()) {
+//            ofs--;
+//            idx = P.get_player(ofs);
+//        }
+//        my_receivers[idx] = 1;
+//    }
     for (int i = 0; i < P.num_players(); i++)
     {
-        my_senders[i] = P.get_offset(i) <= threshold;
-        my_receivers[i] = P.get_offset(i) >= P.num_players() - threshold;
+        my_senders[i] = true;
+        my_receivers[i] = true;
     }
     P.partial_broadcast(my_senders, my_receivers, *os);
 }

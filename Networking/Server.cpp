@@ -67,7 +67,8 @@ void Server::send_names()
   addresses.store(ports);
   for (int i=0; i<nmachines; i++)
     {
-      addresses.Send(socket_num[i]);
+      if (socket_num[i] != 0)
+        addresses.Send(socket_num[i]);
     }
 }
 
@@ -131,13 +132,14 @@ void Server::start()
     }
 
   // get names
-  for (i=0; i<nmachines; i++)  
-    get_name(i);  
+  for (i=0; i<nmachines; i++) if (socket_num[i] != 0)
+    get_name(i);
 
   // check setup, party 0 doesn't matter
   bool all_on_local = true, none_on_local = true;
   for (i = 1; i < nmachines; i++)
     {
+      if (names[i].empty()) continue;
       bool on_local = names[i].compare("127.0.0.1");
       all_on_local &= on_local;
       none_on_local &= not on_local;

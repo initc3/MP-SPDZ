@@ -253,12 +253,17 @@ vector<T> Shamir<T>::get_randoms(PRNG& G, int t)
     {
         inputs.clear();
         for (int j = 0; j < P.num_players(); j++)
-            inputs.push_back(input.finalize(j));
+            if (!P.N.get_name(j).empty()) inputs.push_back(input.finalize(j));
         for (size_t j = 0; j < hyper.size(); j++)
         {
             random.push_back({});
+            int idx = 0;
             for (int k = 0; k < P.num_players(); k++)
-                random.back() += hyper[j][k] * inputs[k];
+                if (!P.N.get_name(k).empty()) {
+                    // TODO: not sure how to deal with hyper
+                    random.back() += hyper[j][k] * inputs[idx];
+                    idx++;
+                }
         }
     }
     return random;

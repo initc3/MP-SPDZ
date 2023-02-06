@@ -107,7 +107,7 @@ RUN ./Scripts/setup-ssl.sh ${cryptoplayers} ${ssl_dir}
 ###############################################################################
 FROM buildenv as machine
 
-ARG machine="mascot-party.x"
+ARG machine="malicious-shamir-party.x"
 
 ARG gfp_mod_sz=2
 
@@ -144,6 +144,9 @@ FROM machine as program
 ARG src="tutorial"
 ARG compile_options="--field=64"
 RUN ./compile.py ${compile_options} ${src}
-RUN mkdir -p Player-Data \
-        && echo 1 2 3 4 > Player-Data/Input-P0-0 \
-        && echo 1 2 3 4 > Player-Data/Input-P1-0
+#RUN mkdir -p Player-Data \
+#        && echo 1 2 3 4 > Player-Data/Input-P0-0 \
+#        && echo 1 2 3 4 > Player-Data/Input-P1-0
+
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    iproute2
