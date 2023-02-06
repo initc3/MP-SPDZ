@@ -283,7 +283,7 @@ void octetStream::Receive(string sender, string receiver, int cnt)
 {
     auto vlen = get_variable("T0", "len" + sender + receiver + to_string(cnt), sender, receiver);
     while (vlen.size() != LENGTH_SIZE) {
-        std::this_thread::sleep_for(std::chrono::milliseconds(100));
+        std::this_thread::sleep_for(std::chrono::milliseconds(1));
         vlen = get_variable("T0", "len" + sender + receiver + to_string(cnt), sender, receiver);
     }
     octet blen[LENGTH_SIZE];
@@ -295,7 +295,7 @@ void octetStream::Receive(string sender, string receiver, int cnt)
 
     vector<uint8_t> vdata = get_variable("T0", "data" + sender + receiver + to_string(cnt), sender, receiver);
     while (vdata.size() != len) {
-        std::this_thread::sleep_for(std::chrono::milliseconds(100));
+        std::this_thread::sleep_for(std::chrono::milliseconds(1));
         vdata = get_variable("T0", "data" + sender + receiver + to_string(cnt), sender, receiver);
     }
     std::copy(vdata.begin(), vdata.end(), data);
