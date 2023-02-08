@@ -81,13 +81,9 @@ template<class T>
 void ShamirMC<T>::POpen(vector<typename T::open_type>& values, const vector<T>& S,
         const Player& P)
 {
-cerr << "begin ShamirMC<T>::POpen" << endl;
     prepare(S, P);
-    cerr << "1" << endl;
     exchange(P);
-    cerr << "2" << endl;
     finalize(values, S);
-    cerr << "end ShamirMC<T>::POpen" << endl;
 }
 
 template<class T>

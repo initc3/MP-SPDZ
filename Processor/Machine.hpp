@@ -382,17 +382,17 @@ void Machine<sint, sgf2n>::run(const string &progname) {
   // run main tape
   run_tape(0, 0, 0, N.num_players());
   join_tape(0);
-  
-//  print_compiler();
+  print_compiler();
 
-//  finish_timer.start();
+
+  finish_timer.start();
 
   // actual usage
   auto res = stop_threads();
   DataPositions &pos = res.first;
 
-//  finish_timer.stop();
-//
+  finish_timer.stop();
+
 //#ifdef VERBOSE
 //  cerr << "Memory usage: ";
 //  tinfo[0].print_usage(cerr, Mp.MS, "sint");
@@ -498,13 +498,13 @@ void Machine<sint, sgf2n>::run(const string &progname) {
     stats.print();
   }
 
-//  if (not opts.file_prep_per_thread) {
-//    Data_Files<sint, sgf2n> df(*this);
-//    df.seekg(pos);
-//    df.prune();
-//  }
+  if (not opts.file_prep_per_thread) {
+    Data_Files<sint, sgf2n> df(*this);
+    df.seekg(pos);
+    df.prune();
+  }
 
-//  suggest_optimizations();
+  suggest_optimizations();
 
 
 #ifdef VERBOSE

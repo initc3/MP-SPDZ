@@ -1,12 +1,13 @@
+#!/bin/bash
 
-N=4
-T=1
-port=4900
+source ./test/utils.sh
 
 batch_size=$1
 
-pkill -f .x
+prep_dir=offline/buffer
 
-for ((id = 0; id < $N; id++ )) do
-  ./random-shamir.x -N $N -T $T -i $id -p $port -s $batch_size --prep-dir offline/random-bits > log_$id.txt 2>&1 &
+rm -rf $prep_dir/$N-MSp-$k/Triples-*
+
+for ((id = 0; id < $N; id++)) do
+  ./random-triples.x -N $N -T $T -i $id -p $port -s $batch_size --prep-dir $prep_dir > logs/log_triples_$id.txt 2>&1 &
 done

@@ -16,7 +16,7 @@ using namespace std;
 #include "Tools/octetStream.h"
 
 #ifndef BUFFER_SIZE
-#define BUFFER_SIZE 101
+#define BUFFER_SIZE 100
 #endif
 
 class BufferBase

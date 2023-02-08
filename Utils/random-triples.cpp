@@ -8,7 +8,6 @@
 #include "Math/gfp.hpp"
 #include "Protocols/MaliciousRepPrep.hpp"
 #include "Machines/ShamirMachine.hpp"
-
 #include "Tools/ezOptionParser.h"
 
 using namespace ez;
@@ -140,7 +139,6 @@ int generate(ezOptionParser& opt, int nparties)
     int playerno, nshares, port;
     string hostname, prime, prep_dir;
     opt.get("--playerno")->getInt(playerno);
-    //opt.get("--nparties")->getInt(nparties);
     opt.get("--nshares")->getInt(nshares);
     opt.get("--prime")->getString(prime);
     opt.get("--host")->getString(hostname);
@@ -152,7 +150,6 @@ int generate(ezOptionParser& opt, int nparties)
     CryptoPlayer P(N);
 
     // initialize field
-    //gfp_::init_field(bigint(prime));
     T::clear::init_field(bigint(prime));
     // TODO: not sure if the BLS prime should also be set on the `next`
     //T::clear::next::init_default(prime_length, false);
@@ -181,29 +178,23 @@ int generate(ezOptionParser& opt, int nparties)
     SubProcessor<T> processor(output, preprocessing, P);
 
     stringstream ss;
-    ofstream outputFile;
     string prep_data_dir = get_prep_sub_dir<T>(prep_dir, P.num_players());
-    ss << prep_data_dir << "Randoms-" << T::type_short() << "-P" << P.my_num();
-    outputFile.open(ss.str().c_str());
+    ss << prep_data_dir << "Triples-" << T::type_short() << "-P" << P.my_num();
+    string filename = ss.str().c_str();
+    ofstream outputFile(filename, iostream::out | iostream::binary);
+    file_signature<T>().output(outputFile);
 
-//    int nbits = nshares / 2 + nshares % 2;
-//    cerr << "nbits " << nbits << endl;
+    vector<T> tuple(DataPositions::tuple_size[Dtype::DATA_TRIPLE]);
     preprocessing.buffer_size = nshares;
-    int nused = 1;
-//    int nused = nshares;
-    vector<T> bits(nused);
-    for (int i=0; i < nused; i++)
-    {
-        bits[i] = preprocessing.get_random();
-        bits[i].output(outputFile, true);
-        if (i != nused - 1)
-            outputFile << "\n";
+    for (int i = 0; i < nshares; i++) {
+        preprocessing.get(Dtype::DATA_TRIPLE, tuple.data());
+        for (auto& x : tuple)
+            x.output(outputFile, false);
     }
-
-    cout << "\nDONE!" << endl;
 
     T::LivePrep::teardown();
 
     cerr << "total_time " << timer.elapsed() << endl;
+
     return 0;
 }

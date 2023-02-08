@@ -1,4 +1,5 @@
 
+
 include CONFIG
 
 MATH = $(patsubst %.cpp,%.o,$(wildcard Math/*.cpp))
@@ -262,9 +263,8 @@ random-shamir.x: $(VM) $(shamir)
 # random (shamir) bits preproc
 random-bits.x: $(VM) $(shamir)
 
-
-# random (shamir) shares preproc
-random-shares.x: $(VM) $(shamir)
+# random (triples) triples preproc
+random-triples.x: $(VM) $(shamir)
 
 ifeq ($(AVX_OT), 1)
 $(LIBSIMPLEOT): SimpleOT/Makefile

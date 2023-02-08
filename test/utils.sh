@@ -1,0 +1,12 @@
+set -x
+set -e
+
+pkill -f .x || true
+
+N=4
+T=1
+port=4900
+app=tutorial
+prime=52435875175126190479447740508185965837690552500527637822603658699938581184513
+ip_config=HOSTS.txt
+k=255

@@ -1,14 +1,13 @@
-
-N=4
-batch_size=2000
-port=4900
-app=tutorial
+#!/bin/bash
 
 #./compile.py tutorial
 #./Scripts/setup-ssl.sh 4 /opt/ssl/
 
-pkill -f .x
+source ./test/utils.sh
+
+batch_size=$1
+prep_dir=offline/$app
 
 for ((id = 0; id < $N; id++ )) do
-  ./mal-shamir-offline.x -N $N -T 1 -p $id -pn $port -ip HOSTS.txt -b $batch_size --prep-dir offline/$app -npfs $app > log_$id.txt 2>&1 &
+  ./mal-shamir-offline.x -N $N -T $T -p $id -pn $port -ip $ip_config -b $batch_size -P $prime --prep-dir $prep_dir -npfs $app > logs/log_offline_$id.txt 2>&1 &
 done

@@ -35,15 +35,7 @@ services:
       - ./Processor:/usr/src/MP-SPDZ/Processor
       - ./Math:/usr/src/MP-SPDZ/Math
       - ./Tools:/usr/src/MP-SPDZ/Tools
-      - ./log_0.txt:/usr/src/MP-SPDZ/log_0.txt
-      - ./log_1.txt:/usr/src/MP-SPDZ/log_1.txt
-      - ./log_2.txt:/usr/src/MP-SPDZ/log_2.txt
-      - ./log_3.txt:/usr/src/MP-SPDZ/log_3.txt
-#      - ./mal-shamir-offline.x:/usr/src/MP-SPDZ/mal-shamir-offline.x
-#      - ./malicious-shamir-party.x:/usr/src/MP-SPDZ/malicious-shamir-party.x
-#      - ./random-shamir.x:/usr/src/MP-SPDZ/random-shamir.x
-#      - ./random-bits.x:/usr/src/MP-SPDZ/random-bits.x
-#      - ./libSPDZ.so:/usr/src/MP-SPDZ/libSPDZ.so
+      - ./logs:/usr/src/MP-SPDZ/logs
       - ./latency-control.sh:/usr/src/MP-SPDZ/latency-control.sh
       - ./test/:/usr/src/MP-SPDZ/test/
     command: tail -F anything
