@@ -9,5 +9,9 @@ prep_dir=offline/buffer
 rm -rf $prep_dir/$N-MSp-$k/Bits-*
 
 for ((id = 0; id < $N; id++)) do
-  ./random-bits.x -N $N -T $T -i $id -p $port -s $batch_size --prep-dir $prep_dir > logs/log_bits_$id.txt 2>&1 &
+  ./random-bits.x -N $N -T $T -i $id -p $port -s $batch_size -P $prime --prep-dir $prep_dir > logs/log_bits_$id.txt 2>&1 &
 done
+
+sleep 1
+
+python test/prep.py Bits

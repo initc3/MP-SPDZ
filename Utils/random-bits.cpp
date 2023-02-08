@@ -128,13 +128,6 @@ int generate(ezOptionParser& opt, int nparties)
     // https://gitter.im/MP-SPDZ/community?at=5fcadf535be1fb21c5fce581
     //bigint::init_thread();
 
-    // bit length of prime
-    const int prime_length = 256;
-
-    // compute number of 64-bit words needed
-    const int n_limbs = (prime_length + 63) / 64;
-    typedef MaliciousShamirShare<gfp_<0, n_limbs>> T;
-
     //int playerno, nparties, nshares, port;
     int playerno, nshares, port;
     string hostname, prime, prep_dir;
@@ -144,6 +137,13 @@ int generate(ezOptionParser& opt, int nparties)
     opt.get("--host")->getString(hostname);
     opt.get("--port")->getInt(port);
     opt.get("--prep-dir")->getString(prep_dir);
+
+    // bit length of prime
+    const int prime_length = 253;
+
+    // compute number of 64-bit words needed
+    const int n_limbs = (prime_length + 63) / 64;
+    typedef MaliciousShamirShare<gfp_<0, n_limbs>> T;
 
     Names N;
     Server::start_networking(N, playerno, nparties, hostname, port);
@@ -182,14 +182,16 @@ int generate(ezOptionParser& opt, int nparties)
     ss << prep_data_dir << "Bits-" << T::type_short() << "-P" << P.my_num();
     string filename = ss.str().c_str();
     ofstream outputFile(filename, iostream::out | iostream::binary);
-    file_signature<T>().output(outputFile);
+
+//    file_signature<T>().output(outputFile);
 
     vector<T> tuple(DataPositions::tuple_size[Dtype::DATA_BIT]);
     preprocessing.buffer_size = nshares;
     for (int i = 0; i < nshares; i++) {
         preprocessing.get(Dtype::DATA_BIT, tuple.data());
-        for (auto& x : tuple)
+        for (auto& x : tuple) {
             x.output(outputFile, false);
+        }
     }
 
     T::LivePrep::teardown();

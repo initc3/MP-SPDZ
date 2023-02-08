@@ -129,7 +129,7 @@ int generate(ezOptionParser& opt, int nparties)
     //bigint::init_thread();
 
     // bit length of prime
-    const int prime_length = 256;
+    const int prime_length = 253;
 
     // compute number of 64-bit words needed
     const int n_limbs = (prime_length + 63) / 64;
@@ -182,7 +182,8 @@ int generate(ezOptionParser& opt, int nparties)
     ss << prep_data_dir << "Triples-" << T::type_short() << "-P" << P.my_num();
     string filename = ss.str().c_str();
     ofstream outputFile(filename, iostream::out | iostream::binary);
-    file_signature<T>().output(outputFile);
+
+//    file_signature<T>().output(outputFile);
 
     vector<T> tuple(DataPositions::tuple_size[Dtype::DATA_TRIPLE]);
     preprocessing.buffer_size = nshares;
